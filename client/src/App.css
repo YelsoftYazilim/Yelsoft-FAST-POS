@@ -1,0 +1,435 @@
+/* Ana Uygulama Stilleri */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px);
+}
+
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  transition: margin-left 0.3s;
+}
+
+/* Numpad Stilleri */
+.numpad-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 8px;
+}
+
+.numpad-row {
+  display: flex;
+  gap: 1px;
+}
+
+.numpad-btn {
+  flex: 1;
+  font-size: 1.1rem;
+  padding: 5px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+  border: 1px solid #dee2e6;
+}
+
+.numpad-btn:active {
+  transform: scale(0.95);
+}
+
+/* Touch-Friendly Form Stilleri */
+.form-switch-lg {
+  transform: scale(1.5);
+  margin-left: 15px;
+}
+
+.form-switch-lg .form-check-input {
+  height: 24px;
+  width: 48px !important;
+  cursor: pointer;
+}
+
+.form-control-lg, .form-select-lg {
+  font-size: 1.2rem;
+  height: 48px;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* Ödeme Butonları */
+.odeme-buton {
+  font-size: 1.2rem;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.odeme-buton:active {
+  transform: scale(0.98);
+}
+
+.odeme-buton svg {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+/* Navbar Stilleri */
+.navbar {
+  height: 60px;
+  background-color: #343a40;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Stilleri - Yeni tasarım */
+.sidebar {
+  background-color: #343a40;
+  color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s;
+  overflow: hidden;
+  position: relative;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.expanded {
+  width: 250px;
+}
+
+.sidebar-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #adb5bd;
+  transition: color 0.3s;
+}
+
+.sidebar-toggle:hover {
+  color: white;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-menu li:hover {
+  background-color: #495057;
+}
+
+.sidebar-menu li.active {
+  background-color: #007bff;
+}
+
+.sidebar-menu a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-menu .icon {
+  font-size: 1.2rem;
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-menu .text {
+  margin-left: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.sidebar.expanded .text {
+  opacity: 1;
+}
+
+/* Sidebar hover efekti */
+.sidebar.collapsed:hover {
+  width: 250px;
+}
+
+.sidebar.collapsed:hover .text {
+  opacity: 1;
+}
+
+/* Kart Stilleri */
+.dashboard-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Tablo Stilleri */
+.table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Form Stilleri */
+.form-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Satış Ekranı Stilleri */
+.satis-container {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 100px);
+}
+
+.urun-listesi {
+  flex: 1;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sepet-container {
+  width: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sepet-urunler {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.sepet-ozet {
+  border-top: 1px solid #dee2e6;
+  padding-top: 20px;
+}
+
+.sepet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.barkod-input {
+  font-size: 1.2rem;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+/* Buton Stilleri */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .satis-container {
+    flex-direction: column;
+  }
+  
+  .sepet-container {
+    width: 100%;
+  }
+}
+
+/* Genel Yardımcı Sınıflar */
+.text-center {
+  text-align: center;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ödeme Modal Stilleri */
+.odeme-modal .modal-body {
+  padding: 15px 20px 15px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.odeme-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 1rem);
+}
+
+.odeme-modal .modal-content {
+  max-height: 90vh;
+}
+
+.odeme-modal .form-group {
+  margin-bottom: 10px;
+}
+
+.odeme-modal .mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.odeme-modal .mb-4 {
+  margin-bottom: 1.2rem !important;
+}
+
+.odeme-modal hr {
+  margin: 1rem 0;
+}
+
+/* Numpad Stilleri - Büyük ekran için */
+.odeme-modal .numpad-btn {
+  height: 42px;
+  font-size: 1.2rem;
+}
+
+.odeme-modal .form-label {
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
+.odeme-modal .form-control-lg {
+  height: 42px;
+  font-size: 1.1rem;
+  padding: 6px;
+}
+
+.odeme-modal .form-select-lg {
+  height: 42px;
+  font-size: 1.1rem;
+  padding: 6px;
+}
+
+.odeme-modal .alert {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+/* Yan yana form grupları */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Tam ekran modal */
+.fullscreen-modal .modal-dialog {
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+}
+
+.fullscreen-modal .modal-content {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Fiyat Değiştirme Modal Stilleri */
+.fiyat-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100% - 1rem);
+}
+
+.fiyat-modal .modal-body {
+  padding: 15px;
+}
+
+.fiyat-modal .alert {
+  text-align: center;
+}
+
+.sepet-satir:hover {
+  background-color: #f8f9fa;
+}

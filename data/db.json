@@ -1,0 +1,821 @@
+{
+  "urunler": [
+    {
+      "id": 1,
+      "barkod": "1234",
+      "ad": "Kahve",
+      "fiyat": "50",
+      "kdvOrani": "10",
+      "stokMiktari": 9998,
+      "birim": "Adet",
+      "kategori": "İçecekler",
+      "createdAt": "2025-05-19T12:11:07.301Z",
+      "stok": 99999981,
+      "vitrin": true,
+      "updatedAt": "2025-05-19T15:19:54.450Z"
+    },
+    {
+      "id": 2,
+      "barkod": "4321",
+      "ad": "Sigara",
+      "fiyat": "95",
+      "kdvOrani": "0",
+      "stokMiktari": 9995,
+      "birim": "Adet",
+      "kategori": "Tütün",
+      "createdAt": "2025-05-19T12:11:24.217Z",
+      "stok": 99999984,
+      "vitrin": true,
+      "updatedAt": "2025-05-20T07:25:35.745Z",
+      "kategoriId": 1,
+      "altKategoriId": 1
+    },
+    {
+      "id": 3,
+      "barkod": "123",
+      "ad": "qqqqqq",
+      "fiyat": "15",
+      "kdvOrani": "10",
+      "stokMiktari": 1,
+      "birim": "Adet",
+      "kategoriId": 2,
+      "altKategoriId": 2,
+      "vitrin": false,
+      "createdAt": "2025-05-19T19:48:34.797Z",
+      "stok": null
+    },
+    {
+      "id": 4,
+      "barkod": "123",
+      "ad": "qqq",
+      "fiyat": 165,
+      "kdvOrani": "0",
+      "stokMiktari": "1",
+      "birim": "Adet",
+      "kategoriId": 1,
+      "altKategoriId": 1,
+      "vitrin": false,
+      "createdAt": "2025-05-19T19:49:03.915Z",
+      "stok": null,
+      "updatedAt": "2025-05-20T07:20:47.842Z"
+    },
+    {
+      "id": 5,
+      "barkod": "5555",
+      "ad": "EFES BİRA",
+      "fiyat": 180,
+      "kdvOrani": "0",
+      "stokMiktari": 8,
+      "birim": "Adet",
+      "kategoriId": 3,
+      "altKategoriId": 3,
+      "vitrin": false,
+      "createdAt": "2025-05-19T20:16:16.931Z",
+      "updatedAt": "2025-05-19T23:00:10.915Z",
+      "stok": null
+    },
+    {
+      "id": 6,
+      "barkod": "6666",
+      "ad": "TUBORG BİRA",
+      "fiyat": "150",
+      "kdvOrani": "0",
+      "stokMiktari": "",
+      "birim": "Adet",
+      "kategoriId": 3,
+      "altKategoriId": 4,
+      "vitrin": false,
+      "createdAt": "2025-05-19T20:16:58.381Z",
+      "updatedAt": "2025-05-19T20:18:13.755Z"
+    },
+    {
+      "id": 7,
+      "barkod": "12312312",
+      "ad": "12312",
+      "fiyat": 135.3,
+      "kdvOrani": "2",
+      "stokMiktari": "",
+      "birim": "Adet",
+      "kategoriId": 1,
+      "altKategoriId": 1,
+      "vitrin": false,
+      "createdAt": "2025-05-19T23:33:44.487Z",
+      "updatedAt": "2025-05-20T07:20:47.844Z"
+    },
+    {
+      "id": 8,
+      "barkod": "253625",
+      "ad": "greengo",
+      "fiyat": 110,
+      "kdvOrani": "20",
+      "stokMiktari": 99,
+      "birim": "Adet",
+      "kategoriId": 1,
+      "altKategoriId": 1,
+      "vitrin": false,
+      "createdAt": "2025-05-20T07:18:19.434Z",
+      "stok": null,
+      "updatedAt": "2025-05-20T07:20:47.845Z"
+    }
+  ],
+  "satislar": [
+    {
+      "id": 1,
+      "tarih": "2023-08-15T10:30:00Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "adet": 2,
+          "fiyat": 15.99
+        },
+        {
+          "urunId": 3,
+          "adet": 1,
+          "fiyat": 25.99
+        }
+      ],
+      "toplamTutar": 57.97,
+      "odemeYontemi": "Nakit"
+    },
+    {
+      "id": 2,
+      "tarih": "2023-08-15T14:45:00Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "adet": 3,
+          "fiyat": 5.99
+        }
+      ],
+      "toplamTutar": 17.97,
+      "odemeYontemi": "Kredi Kartı"
+    },
+    {
+      "id": 3,
+      "fisNo": "FIS-1747663167097",
+      "tarih": "2025-05-19T13:59:27.097Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": "50",
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": "10",
+          "kdvTutari": 4.55,
+          "tutar": 50
+        }
+      ],
+      "araToplam": 45.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 50,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T13:59:27.097Z"
+    },
+    {
+      "id": 4,
+      "fisNo": "FIS-1747667978585",
+      "tarih": "2025-05-19T15:19:38.585Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": "50",
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": "10",
+          "kdvTutari": 4.55,
+          "tutar": 50
+        }
+      ],
+      "araToplam": 45.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 50,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:19:38.585Z"
+    },
+    {
+      "id": 5,
+      "fisNo": "FIS-1747668042979",
+      "tarih": "2025-05-19T15:20:42.979Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": "50",
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": "10",
+          "kdvTutari": 4.55,
+          "tutar": 50
+        }
+      ],
+      "araToplam": 45.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 50,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:20:42.979Z"
+    },
+    {
+      "id": 6,
+      "fisNo": "FIS-1747668769126",
+      "tarih": "2025-05-19T15:32:49.126Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 100,
+      "kdvToplam": 0,
+      "toplamTutar": 100,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:32:49.126Z"
+    },
+    {
+      "id": 7,
+      "fisNo": "FIS-1747668905511",
+      "tarih": "2025-05-19T15:35:05.511Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 100,
+      "kdvToplam": 0,
+      "toplamTutar": 100,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:35:05.511Z"
+    },
+    {
+      "id": 8,
+      "fisNo": "FIS-1747668910110",
+      "tarih": "2025-05-19T15:35:10.110Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 3,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 13.64,
+          "tutar": 150
+        }
+      ],
+      "araToplam": 136.36,
+      "kdvToplam": 13.64,
+      "toplamTutar": 150,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:35:10.110Z"
+    },
+    {
+      "id": 9,
+      "fisNo": "FIS-1747668946893",
+      "tarih": "2025-05-19T15:35:46.893Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 4.55,
+          "tutar": 50
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 145.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 150,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:35:46.893Z"
+    },
+    {
+      "id": 10,
+      "fisNo": "FIS-1747668970361",
+      "tarih": "2025-05-19T15:36:10.361Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        },
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 2,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 9.09,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 190.91,
+      "kdvToplam": 9.09,
+      "toplamTutar": 200,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:36:10.361Z"
+    },
+    {
+      "id": 11,
+      "fisNo": "FIS-1747669311462",
+      "tarih": "2025-05-19T15:41:51.462Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 4.55,
+          "tutar": 50
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 145.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 150,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T15:41:51.462Z"
+    },
+    {
+      "id": 12,
+      "fisNo": "FIS-1747688002954",
+      "tarih": "2025-05-19T20:53:22.954Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 4.55,
+          "tutar": 50
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 145.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 150,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T20:53:22.955Z"
+    },
+    {
+      "id": 13,
+      "fisNo": "FIS-1747688027848",
+      "tarih": "2025-05-19T20:53:47.849Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        },
+        {
+          "urunId": 3,
+          "urunAdi": "qqqqqq",
+          "adet": 3,
+          "birimFiyat": 15,
+          "birimFiyatHaricKDV": 13.64,
+          "kdvOrani": 10,
+          "kdvTutari": 4.09,
+          "tutar": 45
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 4,
+          "birimFiyat": 150,
+          "birimFiyatHaricKDV": 150,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 600
+        },
+        {
+          "urunId": 4,
+          "urunAdi": "qqq",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 840.91,
+      "kdvToplam": 4.09,
+      "toplamTutar": 845,
+      "odemeYontemi": "Kredi Kartı",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T20:53:47.849Z"
+    },
+    {
+      "id": 14,
+      "fisNo": "FIS-1747689844486",
+      "tarih": "2025-05-19T21:24:04.486Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 2,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 9.09,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 90.91,
+      "kdvToplam": 9.09,
+      "toplamTutar": 100,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T21:24:04.486Z"
+    },
+    {
+      "id": 15,
+      "fisNo": "FIS-1747690062030",
+      "tarih": "2025-05-19T21:27:42.030Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 3,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 13.64,
+          "tutar": 150
+        }
+      ],
+      "araToplam": 136.36,
+      "kdvToplam": 13.64,
+      "toplamTutar": 150,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T21:27:42.030Z"
+    },
+    {
+      "id": 16,
+      "fisNo": "FIS-1747690083718",
+      "tarih": "2025-05-19T21:28:03.719Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 3,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 300
+        }
+      ],
+      "araToplam": 300,
+      "kdvToplam": 0,
+      "toplamTutar": 300,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T21:28:03.719Z"
+    },
+    {
+      "id": 17,
+      "fisNo": "FIS-1747691932161",
+      "tarih": "2025-05-19T21:58:52.161Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 2,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 9.09,
+          "tutar": 100
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 190.91,
+      "kdvToplam": 9.09,
+      "toplamTutar": 200,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T21:58:52.161Z"
+    },
+    {
+      "id": 18,
+      "fisNo": "FIS-1747691959820",
+      "tarih": "2025-05-19T21:59:19.820Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 4.55,
+          "tutar": 50
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 4,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 100,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 400
+        }
+      ],
+      "araToplam": 445.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 450,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-19T21:59:19.820Z"
+    },
+    {
+      "id": 19,
+      "fisNo": "FIS-1747725562662",
+      "tarih": "2025-05-20T07:19:22.662Z",
+      "urunler": [
+        {
+          "urunId": 8,
+          "urunAdi": "greengo",
+          "adet": 7,
+          "birimFiyat": 100,
+          "birimFiyatHaricKDV": 83.33,
+          "kdvOrani": 20,
+          "kdvTutari": 116.67,
+          "tutar": 700
+        }
+      ],
+      "araToplam": 583.33,
+      "kdvToplam": 116.67,
+      "toplamTutar": 700,
+      "odemeYontemi": "Kredi Kartı",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-20T07:19:22.662Z"
+    },
+    {
+      "id": 20,
+      "fisNo": "FIS-1747726202720",
+      "tarih": "2025-05-20T07:30:02.720Z",
+      "urunler": [
+        {
+          "urunId": 1,
+          "urunAdi": "Kahve",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 45.45,
+          "kdvOrani": 10,
+          "kdvTutari": 4.55,
+          "tutar": 50
+        },
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 1,
+          "birimFiyat": 95,
+          "birimFiyatHaricKDV": 95,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 95
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 1,
+          "birimFiyat": 180,
+          "birimFiyatHaricKDV": 180,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 180
+        }
+      ],
+      "araToplam": 320.45,
+      "kdvToplam": 4.55,
+      "toplamTutar": 325,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-20T07:30:02.720Z"
+    },
+    {
+      "id": 21,
+      "fisNo": "FIS-1747726223315",
+      "tarih": "2025-05-20T07:30:23.315Z",
+      "urunler": [
+        {
+          "urunId": 3,
+          "urunAdi": "qqqqqq",
+          "adet": 1,
+          "birimFiyat": 15,
+          "birimFiyatHaricKDV": 13.64,
+          "kdvOrani": 10,
+          "kdvTutari": 1.36,
+          "tutar": 15
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 1,
+          "birimFiyat": 180,
+          "birimFiyatHaricKDV": 180,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 180
+        },
+        {
+          "urunId": 8,
+          "urunAdi": "greengo",
+          "adet": 1,
+          "birimFiyat": 110,
+          "birimFiyatHaricKDV": 91.67,
+          "kdvOrani": 20,
+          "kdvTutari": 18.33,
+          "tutar": 110
+        }
+      ],
+      "araToplam": 285.31,
+      "kdvToplam": 19.69,
+      "toplamTutar": 305,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-20T07:30:23.315Z"
+    },
+    {
+      "id": 22,
+      "fisNo": "FIS-1747728889064",
+      "tarih": "2025-05-20T08:14:49.065Z",
+      "urunler": [
+        {
+          "urunId": 2,
+          "urunAdi": "Sigara",
+          "adet": 3,
+          "birimFiyat": 95,
+          "birimFiyatHaricKDV": 95,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 285
+        },
+        {
+          "urunId": 3,
+          "urunAdi": "qqqqqq",
+          "adet": 2,
+          "birimFiyat": 15,
+          "birimFiyatHaricKDV": 13.64,
+          "kdvOrani": 10,
+          "kdvTutari": 2.73,
+          "tutar": 30
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 2,
+          "birimFiyat": 180,
+          "birimFiyatHaricKDV": 180,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 360
+        }
+      ],
+      "araToplam": 672.27,
+      "kdvToplam": 2.73,
+      "toplamTutar": 675,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-20T08:14:49.065Z"
+    }
+  ],
+  "kategoriler": [
+    {
+      "id": 1,
+      "ad": "TEST",
+      "aciklama": "deneme",
+      "olusturmaTarihi": "2025-05-19T18:18:43.708Z",
+      "guncellenmeTarihi": "2025-05-19T19:47:47.612Z"
+    },
+    {
+      "id": 2,
+      "ad": "ahmet",
+      "aciklama": "qwe",
+      "olusturmaTarihi": "2025-05-19T19:47:54.158Z",
+      "guncellenmeTarihi": "2025-05-19T19:47:54.158Z"
+    },
+    {
+      "id": 3,
+      "ad": "BİRALAR",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:08.657Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:08.657Z"
+    }
+  ],
+  "altKategoriler": [
+    {
+      "id": 1,
+      "ad": "TÜTÜN",
+      "kategoriId": 1,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T18:18:52.370Z",
+      "guncellenmeTarihi": "2025-05-19T18:20:40.163Z"
+    },
+    {
+      "id": 2,
+      "ad": "sülü",
+      "kategoriId": 2,
+      "aciklama": "123",
+      "olusturmaTarihi": "2025-05-19T19:48:02.549Z",
+      "guncellenmeTarihi": "2025-05-19T19:48:02.549Z"
+    },
+    {
+      "id": 3,
+      "ad": "EFES",
+      "kategoriId": 3,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:17.549Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:17.549Z"
+    },
+    {
+      "id": 4,
+      "ad": "TUBORG",
+      "kategoriId": 3,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:28.987Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:28.987Z"
+    }
+  ]
+}
