@@ -6,7 +6,7 @@
       "ad": "Kahve",
       "fiyat": "50",
       "kdvOrani": "10",
-      "stokMiktari": 9997,
+      "stokMiktari": 9998,
       "birim": "Adet",
       "kategori": "İçecekler",
       "createdAt": "2025-05-19T12:11:07.301Z",
@@ -18,15 +18,15 @@
       "id": 2,
       "barkod": "4321",
       "ad": "Sigara",
-      "fiyat": 114,
+      "fiyat": "95",
       "kdvOrani": "0",
-      "stokMiktari": 9994,
+      "stokMiktari": 9995,
       "birim": "Adet",
       "kategori": "Tütün",
       "createdAt": "2025-05-19T12:11:24.217Z",
       "stok": 99999984,
       "vitrin": true,
-      "updatedAt": "2025-05-20T10:27:26.760Z",
+      "updatedAt": "2025-05-20T07:25:35.745Z",
       "kategoriId": 1,
       "altKategoriId": 1
     },
@@ -48,7 +48,7 @@
       "id": 4,
       "barkod": "123",
       "ad": "qqq",
-      "fiyat": 198,
+      "fiyat": 165,
       "kdvOrani": "0",
       "stokMiktari": "1",
       "birim": "Adet",
@@ -57,7 +57,7 @@
       "vitrin": false,
       "createdAt": "2025-05-19T19:49:03.915Z",
       "stok": null,
-      "updatedAt": "2025-05-20T10:27:26.760Z"
+      "updatedAt": "2025-05-20T07:20:47.842Z"
     },
     {
       "id": 5,
@@ -65,7 +65,7 @@
       "ad": "EFES BİRA",
       "fiyat": 180,
       "kdvOrani": "0",
-      "stokMiktari": 6,
+      "stokMiktari": 8,
       "birim": "Adet",
       "kategoriId": 3,
       "altKategoriId": 3,
@@ -92,7 +92,7 @@
       "id": 7,
       "barkod": "12312312",
       "ad": "12312",
-      "fiyat": 162.36,
+      "fiyat": 135.3,
       "kdvOrani": "2",
       "stokMiktari": "",
       "birim": "Adet",
@@ -100,13 +100,13 @@
       "altKategoriId": 1,
       "vitrin": false,
       "createdAt": "2025-05-19T23:33:44.487Z",
-      "updatedAt": "2025-05-20T10:27:26.761Z"
+      "updatedAt": "2025-05-20T07:20:47.844Z"
     },
     {
       "id": 8,
       "barkod": "253625",
       "ad": "greengo",
-      "fiyat": 132,
+      "fiyat": 110,
       "kdvOrani": "20",
       "stokMiktari": 99,
       "birim": "Adet",
@@ -115,7 +115,7 @@
       "vitrin": false,
       "createdAt": "2025-05-20T07:18:19.434Z",
       "stok": null,
-      "updatedAt": "2025-05-20T10:27:26.761Z"
+      "updatedAt": "2025-05-20T07:20:47.845Z"
     }
   ],
   "satislar": [
@@ -759,49 +759,6 @@
       "odemeYontemi": "Nakit",
       "odemeDurumu": "Ödendi",
       "createdAt": "2025-05-20T08:14:49.065Z"
-    },
-    {
-      "id": 23,
-      "fisNo": "FIS-1747736806403",
-      "tarih": "2025-05-20T10:26:46.403Z",
-      "urunler": [
-        {
-          "urunId": 2,
-          "urunAdi": "Sigara",
-          "adet": 1,
-          "birimFiyat": 95,
-          "birimFiyatHaricKDV": 95,
-          "kdvOrani": 0,
-          "kdvTutari": 0,
-          "tutar": 95
-        },
-        {
-          "urunId": 1,
-          "urunAdi": "Kahve",
-          "adet": 1,
-          "birimFiyat": 50,
-          "birimFiyatHaricKDV": 45.45,
-          "kdvOrani": 10,
-          "kdvTutari": 4.55,
-          "tutar": 50
-        },
-        {
-          "urunId": 5,
-          "urunAdi": "EFES BİRA",
-          "adet": 2,
-          "birimFiyat": 180,
-          "birimFiyatHaricKDV": 180,
-          "kdvOrani": 0,
-          "kdvTutari": 0,
-          "tutar": 360
-        }
-      ],
-      "araToplam": 500.45,
-      "kdvToplam": 4.55,
-      "toplamTutar": 505,
-      "odemeYontemi": "Nakit",
-      "odemeDurumu": "Ödendi",
-      "createdAt": "2025-05-20T10:26:46.403Z"
     }
   ],
   "kategoriler": [
