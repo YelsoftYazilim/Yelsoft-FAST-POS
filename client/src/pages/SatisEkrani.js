@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Form, Button, Table, Modal, Nav } from 'react-bootstrap';
 import { FaBarcode, FaPlus, FaMinus, FaTrash, FaMoneyBill, FaCreditCard, FaPrint, FaTags, FaLayerGroup, FaBackspace, FaEdit, FaCheck, FaPause, FaShoppingCart, FaSearch } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import { toast } from 'react-toastify';
 
-// CSS stillerini ekleyin
+// CSS stillerini güncelleyelim
 const styles = {
   satisContainer: {
     display: 'flex',
@@ -14,11 +14,13 @@ const styles = {
     marginTop: '10px'
   },
   urunContainer: {
-    flex: '1 0 60%',
-    maxWidth: '65%',
-    minWidth: '65%',
+    flex: '1 0 30%',
+    maxWidth: '30%',
+    minWidth: '30%',
     overflow: 'auto',
-    height: '100%'
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
   sepetContainer: {
     flex: '1 0 35%',
@@ -26,6 +28,14 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     height: '100%'
+  },
+  vitrinContainer: {
+    flex: '1 0 35%',
+    maxWidth: '35%',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflowY: 'auto'
   },
   sepetUrunler: {
     flex: '1',
@@ -39,14 +49,113 @@ const styles = {
     marginBottom: '15px'
   },
   kategoriListe: {
-    minHeight: '80px'
+    minHeight: '40px'
   },
   altKategoriListe: {
-    minHeight: '80px'
+    minHeight: '40px'
   },
   urunListe: {
-    height: 'calc(100% - 160px)',
+    height: 'calc(100% - 80px)',
     overflow: 'auto'
+  },
+  barkodNumpad: {
+    marginTop: '5px',
+    marginBottom: '10px',
+    width: '100%'
+  },
+  butonContainer: {
+    display: 'flex',
+    gap: '5px',
+    width: '100%',
+    marginBottom: '5px'
+  },
+  butonStyle: {
+    flex: 1,
+    padding: '5px',
+    fontSize: '0.9rem'
+  },
+  compactForm: {
+    marginBottom: '5px'
+  },
+  vitrinUrunlerContainer: {
+    marginTop: '5px',
+    marginBottom: '5px',
+    height: 'calc(100% - 350px)',
+    overflow: 'auto',
+    border: '1px solid #dee2e6',
+    borderRadius: '6px',
+    padding: '5px',
+    backgroundColor: '#f8f9fa'
+  },
+  vitrinUrunlerGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+    gap: '5px'
+  },
+  vitrinUrunCard: {
+    padding: '5px',
+    textAlign: 'center',
+    border: '1px solid #dee2e6',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    backgroundColor: 'white',
+    height: '90px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  // Yeni mobil uyumlu stiller
+  mobilBarkodForm: {
+    position: 'sticky',
+    top: 0,
+    background: 'white',
+    zIndex: 100,
+    padding: '10px 0',
+    borderBottom: '1px solid #eee'
+  },
+  mobilButtonBar: {
+    position: 'sticky',
+    top: '60px',
+    background: 'white',
+    zIndex: 100,
+    paddingBottom: '10px',
+    borderBottom: '1px solid #eee'
+  },
+  mobilNumpad: {
+    position: 'sticky',
+    top: '110px',
+    background: 'white',
+    zIndex: 99,
+    paddingBottom: '10px',
+    borderBottom: '1px solid #eee'
+  },
+  // Mobil cihazlar için yeni stiller
+  mobilAyarlar: {
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    background: '#fff',
+    padding: '10px',
+    boxShadow: '0px -2px 10px rgba(0,0,0,0.1)',
+    maxHeight: '40vh',
+    overflow: 'auto'
+  },
+  inputSpaceForKeyboard: {
+    marginBottom: '40vh' // Sanal klavye için boşluk
+  },
+  klavyeKontrol: {
+    position: 'fixed',
+    bottom: '40vh',
+    right: '10px',
+    zIndex: 1001,
+    padding: '8px 12px',
+    borderRadius: '50%',
+    background: '#007bff',
+    color: '#fff',
+    border: 'none'
   }
 };
 
@@ -66,6 +175,9 @@ const SatisEkrani = () => {
   const [seciliOdemeTipleri, setSeciliOdemeTipleri] = useState([]);
   const [parcaliOdeme, setParcaliOdeme] = useState(false);
   
+  // Çarpı işareti sonrası girilecek miktar için state
+  const [hizliMiktarGirisi, setHizliMiktarGirisi] = useState(false);
+  
   // Fiyat değiştirme için state'ler
   const [showFiyatModal, setShowFiyatModal] = useState(false);
   const [seciliUrunIndex, setSeciliUrunIndex] = useState(null);
@@ -83,9 +195,6 @@ const SatisEkrani = () => {
 
   // Ödenen tutar inputu için ref
   const odenenTutarInputRef = useRef(null);
-  
-  // Sepet adı inputu için ref
-  const sepetAdiInputRef = useRef(null);
   
   // İlk numpad tıklamasını takip etmek için state
   const [ilkNumpadTiklama, setIlkNumpadTiklama] = useState(true);
@@ -150,16 +259,16 @@ const SatisEkrani = () => {
         setYukleniyor(true);
         
         // Ürünleri getir
-        const urunlerRes = await axios.get('/api/urunler');
+        const urunlerRes = await api.get('urunler');
         setUrunler(urunlerRes.data);
         
         // Kategorileri getir
-        const kategorilerRes = await axios.get('/api/kategoriler');
+        const kategorilerRes = await api.get('kategoriler');
         setKategoriler(kategorilerRes.data);
         
         // Ödeme tiplerini getir
         try {
-          const odemeTipleriRes = await axios.get('/api/odeme-tipleri');
+          const odemeTipleriRes = await api.get('odeme-tipleri');
           setOdemeTipleri(odemeTipleriRes.data);
         } catch (err) {
           console.error('Ödeme tipleri getirilemedi:', err);
@@ -188,7 +297,7 @@ const SatisEkrani = () => {
       
       try {
         setYukleniyor(true);
-        const response = await axios.get(`/api/kategoriler/${secilenKategoriId}/alt-kategoriler`);
+        const response = await api.get(`kategoriler/${secilenKategoriId}/alt-kategoriler`);
         setAltKategoriler(response.data);
         
         // Eğer alt kategori varsa, ilk alt kategoriyi otomatik seç
@@ -216,21 +325,24 @@ const SatisEkrani = () => {
 
   // Kategori değişikliği
   const handleKategoriChange = (kategoriId) => {
+    // Eğer açık bir klavye varsa, aktif elemandan focus'u kaldır
+    document.activeElement?.blur();
+    
+    // Kategori ID'sini güncelle
     setSecilenKategoriId(kategoriId);
   };
   
   // Alt kategori değişikliği
   const handleAltKategoriChange = (altKategoriId) => {
+    // Eğer açık bir klavye varsa, aktif elemandan focus'u kaldır
+    document.activeElement?.blur();
+    
+    // Alt kategori ID'sini güncelle
     setSecilenAltKategoriId(altKategoriId);
   };
   
   // Filtrelenmiş ürünleri hesapla
   const filtrelenmisUrunler = urunler.filter(urun => {
-    // Sadece vitrin filtresi
-    if (sadecVitrin && !urun.vitrin) {
-      return false;
-    }
-    
     // Kategori filtresi
     if (secilenKategoriId && urun.kategoriId !== parseInt(secilenKategoriId)) {
       return false;
@@ -244,64 +356,65 @@ const SatisEkrani = () => {
     return true;
   });
 
+  // Sadece vitrin ürünlerini filtrele
+  const vitrinUrunler = urunler.filter(urun => urun.vitrin === true);
+
+  // Hızlı miktar kontrolü - barkod alanında X işareti ile miktarı kontrol eder
+  const getMiktarFromBarkod = () => {
+    let miktar = 1;
+    
+    if (barkod && barkod.includes('X')) {
+      const parcalar = barkod.split('X');
+      if (parcalar.length >= 1 && !isNaN(parcalar[0]) && parcalar[0].trim() !== '') {
+        miktar = parseInt(parcalar[0], 10);
+      }
+    }
+    
+    return miktar;
+  };
+
   // Barkod ile ürün ara ve sepete ekle
   const urunAraVeEkle = async (e) => {
     e.preventDefault();
     
     if (!barkod.trim()) {
-      barkodInputRef.current?.focus();
+      toast.warning('Lütfen bir barkod girin.');
       return;
     }
     
-    setYukleniyor(true);
     try {
+      // Barkodda "X" işareti olup olmadığını kontrol et
+      let miktar = 1;
+      let gercekBarkod = barkod;
+      
+      if (barkod.includes('X')) {
+        const parcalar = barkod.split('X');
+        if (parcalar.length === 2 && !isNaN(parcalar[0]) && parcalar[0].trim() !== '') {
+          miktar = parseInt(parcalar[0], 10);
+          gercekBarkod = parcalar[1];
+        }
+      }
+      
       // Barkod ile ürün ara
-      const response = await axios.get(`/api/urunler/barkod/${barkod}`);
+      const response = await api.get(`urunler/barkod/${gercekBarkod}`);
       const urun = response.data;
       
-      // Stok kontrolü
-      if (urun.stokMiktari <= 0) {
-        toast.warning(`${urun.ad} ürünü stokta kalmamış!`);
-        setBarkod('');
-        barkodInputRef.current?.focus();
-        return;
-      }
+      // Sepete ekle - belirlenen miktarla
+      hizliUrunEkle(urun, miktar);
       
-      // Sepette bu ürün var mı kontrol et
-      const sepetIndex = sepet.findIndex(item => item.urunId === urun.id);
+      // Başarılı ekleme
+      toast.success(`${urun.ad} sepete ${miktar} adet eklendi.`);
       
-      if (sepetIndex !== -1) {
-        // Ürün sepette varsa miktarını artır
-        const yeniSepet = [...sepet];
-        yeniSepet[sepetIndex].miktar += 1;
-        setSepet(yeniSepet);
-      } else {
-        // Ürün sepette yoksa ekle
-        setSepet([...sepet, {
-          urunId: urun.id,
-          barkod: urun.barkod,
-          ad: urun.ad,
-          birimFiyat: urun.fiyat,
-          kdvOrani: urun.kdvOrani,
-          miktar: 1,
-          birim: urun.birim || 'Adet'
-        }]);
-      }
-      
-      // Barkod alanını temizle ve odaklan
+      // Barkodu temizle ve odaklan
       setBarkod('');
+      setHizliMiktarGirisi(false);
       barkodInputRef.current?.focus();
     } catch (error) {
-      console.error('Ürün arama hatası:', error);
-      if (error.response?.status === 404) {
-        toast.error('Ürün bulunamadı!');
-      } else {
-        toast.error('Ürün aranırken bir hata oluştu.');
-      }
+      console.error('Barkod arama hatası:', error);
+      toast.error('Ürün bulunamadı veya bir hata oluştu.');
       setBarkod('');
+      setHizliMiktarGirisi(false);
       barkodInputRef.current?.focus();
-    } finally {
-      setYukleniyor(false);
     }
   };
 
@@ -342,35 +455,31 @@ const SatisEkrani = () => {
   };
 
   // Hızlı ürün ekleme - vitrin ürünleri için
-  const hizliUrunEkle = async (urun) => {
-    // Stok kontrolü
-    if (urun.stokMiktari <= 0) {
-      toast.warning(`${urun.ad} ürünü stokta kalmamış!`);
-      return;
-    }
+  const hizliUrunEkle = async (urun, miktar = 1) => {
+    // Stok kontrolü kaldırıldı
     
     // Sepette bu ürün var mı kontrol et
-    const sepetIndex = sepet.findIndex(item => item.urunId === urun.id);
+    const sepetIndex = sepet.findIndex(item => item.urunId.toString() === urun.id.toString());
     
     if (sepetIndex !== -1) {
       // Ürün sepette varsa miktarını artır
       const yeniSepet = [...sepet];
-      yeniSepet[sepetIndex].miktar += 1;
+      yeniSepet[sepetIndex].miktar += miktar;
       setSepet(yeniSepet);
     } else {
       // Ürün sepette yoksa ekle
       setSepet([...sepet, {
-        urunId: urun.id,
+        urunId: urun.id.toString(),
         barkod: urun.barkod,
         ad: urun.ad,
-        birimFiyat: urun.fiyat,
-        kdvOrani: urun.kdvOrani,
-        miktar: 1,
+        birimFiyat: Number(parseFloat(urun.fiyat).toFixed(2)),
+        kdvOrani: Number(urun.kdvOrani || 0),
+        miktar: miktar,
         birim: urun.birim || 'Adet'
       }]);
     }
     
-    toast.success(`${urun.ad} sepete eklendi.`);
+    toast.success(`${urun.ad} sepete ${miktar} adet eklendi.`);
     
     // Barkod alanına odaklanma işlemi güçlendirildi
     setTimeout(() => {
@@ -398,61 +507,82 @@ const SatisEkrani = () => {
         
         // Ödeme bilgilerini hazırla
         const odemeBilgileri = seciliOdemeTipleri.map(odeme => ({
-          odemeTipiId: odeme.odemeTipiId,
-          odemeTipiAdi: odeme.odemeTipiAdi,
-          tutar: parseFloat(odeme.tutar)
+          odemeTipiId: Number(odeme.odemeTipiId),
+          odemeTipiAdi: odeme.odemeTipiAdi.toString(),
+          tutar: Number(parseFloat(odeme.tutar).toFixed(2))
         }));
         
         // Satış verisini hazırla
         const satisVerisi = {
+          fisNo: `FIS-${Date.now()}`,
           urunler: sepet.map(item => ({
-            urun: item.urunId,
-            miktar: item.miktar
+            urunId: parseInt(item.urunId),
+            miktar: Number(item.miktar),
+            birimFiyat: Number(parseFloat(item.birimFiyat).toFixed(2))
           })),
+          toplamTutar: Number(hesaplamalar.genelToplam.toFixed(2)),
           parcaliOdeme: true,
           odemeler: odemeBilgileri,
-          musteri: musteri.ad ? musteri : undefined
-        };
-        
-        // Satışı kaydet
-        const response = await axios.post('/api/satislar', satisVerisi);
-        
-        // Başarılı satış
-        toast.success('Parçalı ödeme ile satış başarıyla tamamlandı!');
-        
-        // Sepeti temizle ve modalı kapat
-        setSepet([]);
-        setMusteri({ ad: '', telefon: '' });
-        odemeModalKapat();
-        
-        // Fiş yazdırma işlemi burada yapılabilir
-        console.log('Parçalı ödeme ile satış kaydedildi:', response.data);
-      } else {
-        // Standart ödeme - Satış verisini hazırla
-        const satisVerisi = {
-          urunler: sepet.map(item => ({
-            urun: item.urunId,
-            miktar: item.miktar
-          })),
-          odemeYontemi,
+          odemeYontemi: 'Parçalı Ödeme',
           odemeDurumu: 'Ödendi',
           musteri: musteri.ad ? musteri : undefined
         };
         
         // Satışı kaydet
-        console.log('Gönderilen veri:', satisVerisi);
-        const response = await axios.post('/api/satislar', satisVerisi);
+        console.log('Parçalı Ödeme - Gönderilen veri:', satisVerisi);
+        try {
+          const response = await api.post('satislar', satisVerisi);
+          console.log('API yanıtı:', response);
+          
+          // Başarılı satış
+          toast.success('Parçalı ödeme ile satış başarıyla tamamlandı!');
+          
+          // Sepeti temizle ve modalı kapat (eğer açıksa)
+          setSepet([]);
+          setMusteri({ ad: '', telefon: '' });
+          if (showOdemeModal) {
+            odemeModalKapat();
+          }
+        } catch (err) {
+          console.error('API hatası:', err);
+          toast.error(`Satış yapılamadı: ${err.message}`);
+          throw err;
+        }
+      } else {
+        // Standart ödeme - Satış verisini hazırla
+        const satisVerisi = {
+          fisNo: `FIS-${Date.now()}`,
+          urunler: sepet.map(item => ({
+            urunId: parseInt(item.urunId),
+            miktar: Number(item.miktar),
+            birimFiyat: Number(parseFloat(item.birimFiyat).toFixed(2))
+          })),
+          toplamTutar: Number(hesaplamalar.genelToplam.toFixed(2)),
+          odemeYontemi: odemeYontemi.toString(),
+          odemeDurumu: 'Ödendi',
+          musteri: musteri.ad ? musteri : undefined
+        };
         
-        // Başarılı satış
-        toast.success('Satış başarıyla tamamlandı!');
-        
-        // Sepeti temizle ve modalı kapat
-        setSepet([]);
-        setMusteri({ ad: '', telefon: '' });
-        odemeModalKapat();
-        
-        // Fiş yazdırma işlemi burada yapılabilir
-        console.log('Satış kaydedildi:', response.data);
+        // Satışı kaydet
+        console.log('Nakit/Standart Ödeme - Gönderilen veri:', satisVerisi);
+        try {
+          const response = await api.post('satislar', satisVerisi);
+          console.log('API yanıtı:', response);
+          
+          // Başarılı satış
+          toast.success('Satış başarıyla tamamlandı!');
+          
+          // Sepeti temizle ve modalı kapat (eğer açıksa)
+          setSepet([]);
+          setMusteri({ ad: '', telefon: '' });
+          if (showOdemeModal) {
+            odemeModalKapat();
+          }
+        } catch (err) {
+          console.error('API hatası:', err);
+          toast.error(`Satış yapılamadı: ${err.message}`);
+          throw err;
+        }
       }
       
       // Barkod inputuna odaklan - Daha güçlü şekilde
@@ -721,14 +851,14 @@ const SatisEkrani = () => {
         
       const yeniSepet = sepet.map(item => ({
         ...item,
-        birimFiyat: item.birimFiyat * oranFarki
+        birimFiyat: Number((item.birimFiyat * oranFarki).toFixed(2))
       }));
       setSepet(yeniSepet);
       toast.success('Toplam tutar güncellendi.');
     } else {
       // Ürün fiyatını düzenlerken
       const yeniSepet = [...sepet];
-      yeniSepet[seciliUrunIndex].birimFiyat = yeniFiyatDeger;
+      yeniSepet[seciliUrunIndex].birimFiyat = Number(yeniFiyatDeger.toFixed(2));
       setSepet(yeniSepet);
       toast.success('Ürün fiyatı güncellendi.');
     }
@@ -736,49 +866,36 @@ const SatisEkrani = () => {
     fiyatModalKapat();
   };
 
-  // Bekleyen sepetler için işlevler
+  // Bekletme Modal
   const beklemeyeAlModalAc = () => {
     if (sepet.length === 0) {
       toast.warning('Bekletmek için önce sepete ürün ekleyin.');
       return;
     }
-    setBekleyenSepetAdi('');
-    setShowBeklemeyeAlModal(true);
-  };
-  
-  const beklemeyeAlModalKapat = () => {
-    setShowBeklemeyeAlModal(false);
-    // Modal kapandığında barkod alanına odaklan
+    
+    // Modal açmak yerine direkt sepeti beklet
+    const otomatikSepetAdi = `Bekleyen Sepet ${new Date().toLocaleTimeString()}`;
+    
+    const kaydedilecekSepet = {
+      id: Date.now().toString(),
+      ad: otomatikSepetAdi,
+      sepet: [...sepet],
+      olusturmaTarihi: new Date().toISOString(),
+      toplamTutar: hesaplamalar.genelToplam,
+      urunSayisi: sepet.length // Ürün sayısını ekledim
+    };
+    
+    setBekleyenSepetler([...bekleyenSepetler, kaydedilecekSepet]);
+    setSepet([]);
+    toast.success(`Sepet beklemeye alındı`);
+    
+    // Barkod alanına odaklan
     setTimeout(() => {
       barkodInputRef.current?.focus();
     }, 300);
   };
   
-  const sepetiKaydet = () => {
-    if (sepet.length === 0) {
-      toast.warning('Boş sepet kaydedilemez!');
-      return;
-    }
-    
-    if (!bekleyenSepetAdi.trim()) {
-      toast.warning('Lütfen sepet için bir isim girin.');
-      return;
-    }
-    
-    const kaydedilecekSepet = {
-      id: Date.now().toString(),
-      ad: bekleyenSepetAdi,
-      sepet: [...sepet],
-      olusturmaTarihi: new Date().toISOString(),
-      toplamTutar: hesaplamalar.genelToplam
-    };
-    
-    setBekleyenSepetler([...bekleyenSepetler, kaydedilecekSepet]);
-        setSepet([]);
-    toast.success(`"${bekleyenSepetAdi}" sepeti kaydedildi.`);
-    beklemeyeAlModalKapat();
-  };
-  
+  // Bekleyen sepetler modalını aç
   const bekleyenSepetleriGosterModalAc = () => {
     if (bekleyenSepetler.length === 0) {
       toast.info('Bekleyen sepet bulunmamaktadır.');
@@ -789,6 +906,7 @@ const SatisEkrani = () => {
     setShowBekleyenSepetlerModal(true);
   };
   
+  // Bekleyen sepetler modalını kapat
   const bekleyenSepetleriGosterModalKapat = () => {
     setShowBekleyenSepetlerModal(false);
     setSecilenBekleyenSepet(null);
@@ -843,20 +961,218 @@ const SatisEkrani = () => {
   };
 
   // Bekleyen sepetler için state'ler
-  const [showBeklemeyeAlModal, setShowBeklemeyeAlModal] = useState(false);
   const [showBekleyenSepetlerModal, setShowBekleyenSepetlerModal] = useState(false);
   const [bekleyenSepetler, setBekleyenSepetler] = useState([]);
-  const [bekleyenSepetAdi, setBekleyenSepetAdi] = useState('');
   const [secilenBekleyenSepet, setSecilenBekleyenSepet] = useState(null);
 
-  // Bekletme modalı açıldığında sepet adı alanına odaklanma
-  useEffect(() => {
-    if (showBeklemeyeAlModal && sepetAdiInputRef.current) {
-      setTimeout(() => {
-        sepetAdiInputRef.current.focus();
-      }, 300);
+  // Numpad tuşlarına basıldığında barkod alanına eklemek için yeni fonksiyon
+  const barkodNumpadClick = (value) => {
+    // Eğer X tuşuna basıldıysa, miktar girişi modunu aktif et
+    if (value === 'clear') {
+      if (!hizliMiktarGirisi) {
+        // Eğer barkod alanında değer varsa ve sayıysa
+        if (barkod && !isNaN(barkod)) {
+          // X işareti ekle
+          setBarkod(prev => prev + 'X');
+          setHizliMiktarGirisi(true);
+        } else {
+          // Eğer barkod alanı boş veya sayı değilse, sadece temizle
+          setBarkod('');
+        }
+      } else {
+        // Zaten hızlı miktar girişi modundaysak, barkodu temizle
+        setBarkod('');
+        setHizliMiktarGirisi(false);
+      }
     }
-  }, [showBeklemeyeAlModal]);
+    // Eğer backspace tuşuna basıldıysa, son karakteri sil
+    else if (value === 'backspace') {
+      setBarkod(prev => {
+        const newValue = prev.slice(0, -1);
+        // Eğer X işareti silindiyse, miktar girişi modunu kapat
+        if (prev.includes('X') && !newValue.includes('X')) {
+          setHizliMiktarGirisi(false);
+        }
+        return newValue;
+      });
+    }
+    // Sayı tuşları
+    else {
+      setBarkod(prev => prev + value);
+    }
+    
+    // Barkod alanına odaklan
+    setTimeout(() => {
+      barkodInputRef.current?.focus();
+    }, 100);
+  };
+
+  // Kategori seçimi tıklamalı işlevler için mobil uyumlu davranışlar ekleyelim
+  const handleNavItemClick = (e, callback) => {
+    // preventDefault kullanarak varsayılan davranışı engelliyoruz
+    e.preventDefault();
+    
+    // Aktif olan input elemanlarından odağı kaldır
+    document.activeElement?.blur();
+    
+    // İlgili kategori değişikliğini tetikle
+    callback();
+  };
+
+  // Ürün kartları için tıklama güncelleme
+  const handleUrunTikla = (urun) => {
+    // Aktif fokus varsa kaldır (sanal klavyeyi gizlemeyi sağlar)
+    document.activeElement?.blur();
+    
+    // Barkodda X işareti ile çarpan var mı kontrol et
+    const miktar = getMiktarFromBarkod();
+    hizliUrunEkle(urun, miktar);
+    
+    // İşlem sonrası X işareti ile girişi sıfırla
+    if (miktar > 1) {
+      setBarkod('');
+      setHizliMiktarGirisi(false);
+    }
+  };
+
+  // Dosyanın başına viewport meta tag'i kontrol eden bir etki ekleyelim
+  useEffect(() => {
+    // Viewport meta tag'ini bul veya oluştur
+    let viewportTag = document.querySelector('meta[name="viewport"]');
+    if (!viewportTag) {
+      viewportTag = document.createElement('meta');
+      viewportTag.name = 'viewport';
+      document.head.appendChild(viewportTag);
+    }
+    
+    // Sanal klavyeyi kontrol eden özellikleri ekle
+    viewportTag.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, height=device-height, viewport-fit=cover';
+    
+    // Sayfanın kaydırılabilir olması için body stil kontrolü
+    document.body.style.height = '100%';
+    document.body.style.position = 'relative';
+    
+    return () => {
+      // Component unmount olduğunda orijinal viewport ayarına dön
+      viewportTag.content = 'width=device-width, initial-scale=1.0';
+    };
+  }, []);
+
+  // Klavyeyi kapatmak için genel bir fonksiyon ekleyelim
+  const closeKeyboard = () => {
+    // Aktif olan herhangi bir element varsa odağı kaldır
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
+  // Sayfaya dokunuşlarda klavyeyi kapatmak için fonksiyon
+  const handlePageTouch = (e) => {
+    // Eğer dokunulan element bir input veya select değilse klavyeyi kapat
+    if (
+      e.target instanceof HTMLElement && 
+      !['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) &&
+      !e.target.classList.contains('numpad-btn')
+    ) {
+      closeKeyboard();
+    }
+  };
+
+  // Sayfa yüklendiğinde dokunma olayını ekleyelim
+  useEffect(() => {
+    document.addEventListener('touchstart', handlePageTouch);
+    return () => {
+      document.removeEventListener('touchstart', handlePageTouch);
+    };
+  }, []);
+
+  // Komponent içinde, useEffect bölümüne ekleyin
+  useEffect(() => {
+    // Viewport meta tag ayarlarını güncelle
+    const viewportTag = document.querySelector('meta[name="viewport"]');
+    if (viewportTag) {
+      viewportTag.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, height=device-height';
+    }
+    
+    // Mobil cihaz kontrolü
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      // Tüm form alanlarını bir kere bul
+      const inputs = document.querySelectorAll('input, textarea, select');
+      
+      // Odaklanma olayını değiştir
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          // Form elementinin pozisyonunu al
+          const rect = this.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          // Elementi görünür alanın üstüne taşı (klavye açılmadan önce)
+          window.scrollTo({
+            top: scrollTop + rect.top - 100,
+            behavior: 'smooth'
+          });
+        });
+      });
+      
+      // Dokunma ile klavyeyi kapat
+      document.addEventListener('touchstart', (e) => {
+        if (e.target.tagName !== 'INPUT' && 
+            e.target.tagName !== 'TEXTAREA' && 
+            e.target.tagName !== 'SELECT' && 
+            !e.target.closest('.numpad-container')) {
+          // Aktif element varsa, odağı kaldır
+          if (document.activeElement && 
+              (document.activeElement.tagName === 'INPUT' || 
+               document.activeElement.tagName === 'TEXTAREA' || 
+               document.activeElement.tagName === 'SELECT')) {
+            document.activeElement.blur();
+          }
+        }
+      });
+    }
+    
+    return () => {
+      // Temizlik işlemi
+      if (viewportTag) {
+        viewportTag.content = 'width=device-width, initial-scale=1.0';
+      }
+    };
+  }, []);
+
+  // Barkod form güncelleme - inputMode ve enterKeyHint ekleme
+  <Form.Control
+    type="text"
+    placeholder="Barkod okutun..."
+    className="barkod-input"
+    value={barkod}
+    onChange={handleBarkodChange}
+    ref={barkodInputRef}
+    disabled={yukleniyor}
+    style={{ flex: '1', height: '40px' }}
+    inputMode="numeric" // Numerik klavye açılması için
+    enterKeyHint="done" // Enter tuşu "done" olarak gösterilsin
+  />
+
+  // Kategori ekranı içinde yeni bir fonksiyon ekleyelim
+  const handleKategoriInputFocus = (e) => {
+    // Mobil cihaz kontrolü
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      // Önce aktif olan input'tan odağı kaldıralım (sanal klavye kapansın)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      
+      // Sonra sayfayı aşağı kaydıralım
+      setTimeout(() => {
+        window.scrollTo({ 
+          top: document.body.scrollHeight, 
+          behavior: 'smooth' 
+        });
+      }, 100);
+    }
+  };
 
   return (
     <Container fluid className="mt-1">
@@ -865,18 +1181,11 @@ const SatisEkrani = () => {
         <div className="sepet-container" style={styles.sepetContainer}>
           {/* Sepet özeti - üste taşındı */}
           <div className="sepet-ozet" style={styles.sepetOzet}>
-            <div className="d-flex justify-content-between mb-2">
-              <span>Ara Toplam:</span>
-              <span>{hesaplamalar.araToplam.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-2">
-              <span>KDV Toplam:</span>
-              <span>{hesaplamalar.kdvToplam.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</span>
-            </div>
+            {/* Ara toplam ve KDV toplam kaldırıldı */}
             <div className="d-flex justify-content-between mb-3 align-items-center">
-              <h5>Genel Toplam:</h5>
+              <h4 className="mb-0">Genel Toplam:</h4>
               <div className="d-flex align-items-center">
-                <h5 className="mb-0">{hesaplamalar.genelToplam.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</h5>
+                <h3 className="mb-0 fw-bold">{hesaplamalar.genelToplam.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</h3>
                 <Button 
                   variant="outline-primary" 
                   size="sm"
@@ -893,10 +1202,15 @@ const SatisEkrani = () => {
               <Button 
                 variant="success" 
                 size="lg" 
-                onClick={odemeModalAc} 
+                className="py-3 fw-bold"
+                onClick={() => {
+                  // Doğrudan nakit ödeme olarak satışı tamamla
+                  setOdemeYontemi('Nakit');
+                  satisiTamamla();
+                }} 
                 disabled={sepet.length === 0}
               >
-                <FaMoneyBill className="me-2" /> Ödeme Al
+                <FaMoneyBill className="me-2" /> ÖDEME AL
               </Button>
               <Button 
                 variant="outline-danger" 
@@ -905,9 +1219,9 @@ const SatisEkrani = () => {
               >
                 <FaTrash className="me-2" /> Sepeti Temizle
               </Button>
-                          </div>
-        </div>
-        
+            </div>
+          </div>
+          
           {/* Sepetteki ürünler - aşağıya taşındı */}
           <div className="sepet-urunler" style={styles.sepetUrunler}>
             {sepet.length === 0 ? (
@@ -1006,62 +1320,138 @@ const SatisEkrani = () => {
           
         {/* Sağ Taraf - Ürünler ve Arama (yer değiştirildi) */}
         <div className="urun-container" style={styles.urunContainer}>
-          <Form onSubmit={urunAraVeEkle} className="mb-3">
-            <div className="d-flex align-items-center">
-              <div className="d-flex me-2">
-                <Button 
-                  variant="warning"
-                  className="me-2"
-                  onClick={beklemeyeAlModalAc}
-                  title="Sepeti Beklet"
-                >
-                  <FaPause className="me-1" /> Beklet
-                </Button>
-                <Button 
-                  variant="info"
-                  onClick={bekleyenSepetleriGosterModalAc}
-                  title="Bekleyen Sepeti Çağır"
-                >
-                  <FaShoppingCart className="me-1" /> Çağır
-                </Button>
+          {/* Barkod Form - Sticky/Fixed yapısı */}
+          <div style={styles.mobilBarkodForm}>
+            <Form onSubmit={urunAraVeEkle} className="mb-2">
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1">
+                  <Form.Group className="mb-0">
+                    <Form.Label className="fw-bold small mb-1">Barkod ile Ürün Ekle</Form.Label>
+                    <div className="d-flex">
+                      <Form.Control
+                        type="text"
+                        placeholder="Barkod okutun..."
+                        className="barkod-input"
+                        value={barkod}
+                        onChange={handleBarkodChange}
+                        ref={barkodInputRef}
+                        disabled={yukleniyor}
+                        style={{ flex: '1', height: '40px' }}
+                        inputMode="numeric" // Numerik klavye açılması için
+                        enterKeyHint="done" // Enter tuşu "done" olarak gösterilsin
+                      />
+                      <Button 
+                        variant="primary" 
+                        type="submit" 
+                        className="ms-2 barkod-btn" 
+                        disabled={yukleniyor || !barkod.trim()}
+                        style={{ flex: '0 0 80px', height: '40px' }}
+                      >
+                        <FaBarcode className="me-1" /> Ekle
+                      </Button>
+                    </div>
+                  </Form.Group>
+                </div>
               </div>
-              <div className="flex-grow-1">
-                <Form.Group className="mb-0">
-                  <Form.Label className="fw-bold small mb-1">Barkod ile Ürün Ekle</Form.Label>
-                  <div className="d-flex">
-                    <Form.Control
-                      type="text"
-                      placeholder="Barkod okutun..."
-                      className="barkod-input"
-                      value={barkod}
-                      onChange={handleBarkodChange}
-                      ref={barkodInputRef}
-                      disabled={yukleniyor}
-                    />
-                    <Button 
-                      variant="primary" 
-                      type="submit" 
-                      className="ms-2" 
-                      disabled={yukleniyor || !barkod.trim()}
-                    >
-                      <FaBarcode className="me-1" /> Ekle
-                    </Button>
-                  </div>
-                </Form.Group>
-              </div>
-            </div>
-          </Form>
+            </Form>
+          </div>
           
-          <Card className="mb-4" style={{ height: 'calc(100% - 80px)' }}>
+          {/* Beklet ve Çağır butonları - Sticky/Fixed yapısı */}
+          <div style={{...styles.butonContainer, ...styles.mobilButtonBar}}>
+            <Button 
+              variant="warning"
+              className="w-100 py-1"
+              onClick={beklemeyeAlModalAc}
+              title="Sepeti Beklet"
+              style={styles.butonStyle}
+            >
+              <FaPause className="me-1" /> Beklet
+            </Button>
+            <Button 
+              variant="info"
+              className="w-100 py-1"
+              onClick={bekleyenSepetleriGosterModalAc}
+              title="Bekleyen Sepeti Çağır"
+              style={styles.butonStyle}
+            >
+              <FaShoppingCart className="me-1" /> Çağır
+            </Button>
+          </div>
+          
+          {/* Numpad - Sticky/Fixed yapısı */}
+          <div className="numpad-container barkod-numpad" style={{...styles.barkodNumpad, ...styles.mobilNumpad}}>
+            <h6 className="mb-2 text-muted small">Barkod Girişi</h6>
+            <div className="numpad-row">
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('7')}>7</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('8')}>8</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('9')}>9</Button>
+            </div>
+            <div className="numpad-row">
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('4')}>4</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('5')}>5</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('6')}>6</Button>
+            </div>
+            <div className="numpad-row">
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('1')}>1</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('2')}>2</Button>
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('3')}>3</Button>
+            </div>
+            <div className="numpad-row">
+              <Button variant="light" className="numpad-btn" onClick={() => barkodNumpadClick('0')}>0</Button>
+              <Button variant="danger" className="numpad-btn" onClick={() => barkodNumpadClick('clear')}>X</Button>
+              <Button variant="warning" className="numpad-btn" onClick={() => barkodNumpadClick('backspace')}>
+                <FaBackspace />
+              </Button>
+            </div>
+            <div className="numpad-row mt-1">
+              <Button 
+                variant="success" 
+                className="numpad-btn w-100 py-1"
+                onClick={(e) => urunAraVeEkle(e)}
+              >
+                <FaBarcode className="me-1" /> Ekle
+              </Button>
+            </div>
+          </div>
+          
+          {/* Vitrin Ürünleri - Position değiştirildi */}
+          <div style={styles.vitrinUrunlerContainer}>
+            <h6 className="mb-2 text-muted small">Vitrin Ürünleri</h6>
+            {yukleniyor ? (
+              <div className="text-center py-3">
+                <div className="spinner-border spinner-border-sm text-primary" role="status">
+                  <span className="visually-hidden">Yükleniyor...</span>
+                </div>
+              </div>
+            ) : vitrinUrunler.length === 0 ? (
+              <div className="alert alert-info py-1 small">
+                Vitrin ürünü bulunmuyor.
+              </div>
+            ) : (
+              <div style={styles.vitrinUrunlerGrid}>
+                {vitrinUrunler.map(urun => (
+                  <div 
+                    key={urun.id}
+                    style={styles.vitrinUrunCard}
+                    onClick={() => handleUrunTikla(urun)}
+                  >
+                    <div className="small fw-bold">{urun.ad.length > 10 ? urun.ad.substring(0, 9) + '...' : urun.ad}</div>
+                    <span className="badge bg-primary small">
+                      {parseFloat(urun.fiyat).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Vitrin/Kategoriler - Sağa taşındı */}
+        <div className="vitrin-container" style={styles.vitrinContainer}>
+          <Card className="h-100">
             <Card.Header className="d-flex justify-content-between align-items-center bg-light">
               <div className="fw-bold">Kategoriler ve Ürünler</div>
-              <Form.Check 
-                type="switch"
-                id="vitrin-switch"
-                label="Sadece Vitrin"
-                checked={sadecVitrin}
-                onChange={(e) => setSadecVitrin(e.target.checked)}
-              />
+              {/* Vitrin filteresi kaldırıldı */}
             </Card.Header>
             <Card.Body className="p-0" style={{ overflow: 'hidden', height: 'calc(100% - 55px)' }}>
               {/* Kategori ve Alt Kategori Seçimi */}
@@ -1071,28 +1461,48 @@ const SatisEkrani = () => {
                   <div className="kategori-baslik bg-primary text-white p-2">
                     <FaTags className="me-2" /> Ana Kategoriler
                   </div>
-                  <Nav variant="pills" className="flex-row flex-nowrap overflow-auto p-2">
-                    <Nav.Item>
-                      <Nav.Link 
-                        active={secilenKategoriId === null} 
-                        onClick={() => handleKategoriChange(null)}
-                        className="text-nowrap"
-                      >
-                        Tümü
-                      </Nav.Link>
-                    </Nav.Item>
-                    {kategoriler.map(kategori => (
-                      <Nav.Item key={kategori.id}>
+                  
+                  {/* Bu alan kategori seçimlerini içeriyor. 
+                     Sanal klavye görünürlüğü için burada özel bir stil uygulayacağız */}
+                  <div className="kategori-scroll-container" style={{
+                    position: 'relative',
+                    zIndex: 100
+                  }}>
+                    <Nav variant="pills" className="flex-row flex-nowrap overflow-auto p-2" onTouchStart={(e) => e.stopPropagation()}>
+                      <Nav.Item>
                         <Nav.Link 
-                          active={secilenKategoriId === kategori.id} 
-                          onClick={() => handleKategoriChange(kategori.id)}
+                          active={secilenKategoriId === null} 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleKategoriChange(null);
+                            document.activeElement?.blur();
+                            handleKategoriInputFocus(e); // Yeni fonksiyon ekledik
+                          }}
                           className="text-nowrap"
+                          tabIndex="-1"
                         >
-                          {kategori.ad}
+                          Tümü
                         </Nav.Link>
                       </Nav.Item>
-                    ))}
-                  </Nav>
+                      {kategoriler.map(kategori => (
+                        <Nav.Item key={kategori.id}>
+                          <Nav.Link 
+                            active={secilenKategoriId === kategori.id} 
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleKategoriChange(kategori.id);
+                              document.activeElement?.blur();
+                              handleKategoriInputFocus(e); // Yeni fonksiyon ekledik
+                            }}
+                            className="text-nowrap"
+                            tabIndex="-1"
+                          >
+                            {kategori.ad}
+                          </Nav.Link>
+                        </Nav.Item>
+                      ))}
+                    </Nav>
+                  </div>
                 </div>
                 
                 {/* Alt Kategori Seçimi - Sadece Ana Kategori Seçiliyse Göster */}
@@ -1101,12 +1511,18 @@ const SatisEkrani = () => {
                     <div className="kategori-baslik bg-info text-white p-2">
                       <FaLayerGroup className="me-2" /> Alt Kategoriler
                     </div>
-                    <Nav variant="pills" className="flex-row flex-nowrap overflow-auto p-2">
+                    <Nav variant="pills" className="flex-row flex-nowrap overflow-auto p-2" onTouchStart={(e) => e.stopPropagation()}>
                       <Nav.Item>
                         <Nav.Link 
                           active={secilenAltKategoriId === null} 
-                          onClick={() => handleAltKategoriChange(null)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAltKategoriChange(null);
+                            document.activeElement?.blur();
+                            handleKategoriInputFocus(e); // Yeni fonksiyon ekledik
+                          }}
                           className="text-nowrap"
+                          tabIndex="-1"
                         >
                           Tümü
                         </Nav.Link>
@@ -1115,8 +1531,14 @@ const SatisEkrani = () => {
                         <Nav.Item key={altKategori.id}>
                           <Nav.Link 
                             active={secilenAltKategoriId === altKategori.id} 
-                            onClick={() => handleAltKategoriChange(altKategori.id)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleAltKategoriChange(altKategori.id);
+                              document.activeElement?.blur();
+                              handleKategoriInputFocus(e); // Yeni fonksiyon ekledik
+                            }}
                             className="text-nowrap"
+                            tabIndex="-1"
                           >
                             {altKategori.ad}
                           </Nav.Link>
@@ -1143,12 +1565,12 @@ const SatisEkrani = () => {
                         : 'Henüz ürün bulunmamaktadır.'}
                     </div>
                   ) : (
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                    <div className="row row-cols-1 row-cols-md-1 row-cols-lg-2 g-3">
                       {filtrelenmisUrunler.map(urun => (
                         <div key={urun.id} className="col">
                           <Card 
                             className={`h-100 ${urun.vitrin ? 'border-primary' : ''}`} 
-                            onClick={() => hizliUrunEkle(urun)}
+                            onClick={() => handleUrunTikla(urun)}
                             style={{ cursor: 'pointer' }}
                           >
                             <Card.Body>
@@ -1157,13 +1579,9 @@ const SatisEkrani = () => {
                                 <small className="text-muted">
                                   <FaBarcode className="me-1" /> {urun.barkod}
                                 </small>
-                                <span className="badge bg-primary">
+                                <span className="badge bg-primary fs-6">
                                   {parseFloat(urun.fiyat).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}
                                 </span>
-                              </div>
-                              <div className="d-flex justify-content-between align-items-center mt-2">
-                                <small className="text-muted">Stok: {urun.stokMiktari} {urun.birim}</small>
-                                <small className="text-muted">KDV: %{urun.kdvOrani}</small>
                               </div>
                             </Card.Body>
                           </Card>
@@ -1173,6 +1591,12 @@ const SatisEkrani = () => {
                   )}
                 </div>
               </div>
+              
+              {/* Sayfanın alt kısmında klavye için ekstra boşluk */}
+              <div className="keyboard-spacer" style={{ 
+                height: '250px', 
+                display: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'block' : 'none'
+              }}></div>
             </Card.Body>
           </Card>
         </div>
@@ -1463,7 +1887,7 @@ const SatisEkrani = () => {
                   e.target.select();
                   setIlkFiyatTiklama(true);
                 }}
-                autoFocus
+                // autoFocus kaldırıldı
                       />
                     </Form.Group>
             
@@ -1505,66 +1929,18 @@ const SatisEkrani = () => {
         </Modal.Body>
       </Modal>
       
-      {/* Bekletme Modal */}
-      <Modal show={showBeklemeyeAlModal} onHide={beklemeyeAlModalKapat} backdrop="static" keyboard={false} size="sm" centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Sepeti Beklet</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Sepet Adı</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Örn: Ahmet Bey, Masa 5, vb."
-                value={bekleyenSepetAdi}
-                onChange={(e) => setBekleyenSepetAdi(e.target.value)}
-                ref={sepetAdiInputRef}
-                autoFocus
-              />
-            </Form.Group>
-            <div className="alert alert-info">
-              <small>Toplam Tutar: {hesaplamalar.genelToplam.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</small>
-              <br />
-              <small>Ürün Sayısı: {sepet.length}</small>
-            </div>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={beklemeyeAlModalKapat}>
-            İptal
-          </Button>
-          <Button variant="primary" onClick={sepetiKaydet} disabled={!bekleyenSepetAdi.trim()}>
-            <FaPause className="me-1" /> Beklet
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
       {/* Bekleyen Sepetler Modal */}
       <Modal show={showBekleyenSepetlerModal} onHide={bekleyenSepetleriGosterModalKapat} backdrop="static" keyboard={false} size="md">
         <Modal.Header closeButton>
           <Modal.Title>Bekleyen Sepetler</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="d-flex mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Sepet ara..."
-              onChange={(e) => {
-                // Buraya arama işlevi eklenebilir
-              }}
-              className="me-2"
-            />
-            <Button variant="outline-primary">
-              <FaSearch />
-            </Button>
-          </div>
-          
           <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
             <Table striped hover responsive>
               <thead>
                 <tr>
                   <th>Sepet Adı</th>
+                  <th>Ürün Sayısı</th>
                   <th>Tutar</th>
                   <th>İşlemler</th>
                 </tr>
@@ -1578,9 +1954,10 @@ const SatisEkrani = () => {
                     style={{ cursor: 'pointer' }}
                   >
                     <td>{sepet.ad}</td>
+                    <td>{sepet.urunSayisi || sepet.sepet.length} ürün</td>
                     <td>{sepet.toplamTutar.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</td>
                     <td>
-          <Button 
+                      <Button 
                         variant="outline-danger" 
                         size="sm" 
                         onClick={(e) => {
@@ -1596,7 +1973,7 @@ const SatisEkrani = () => {
                 ))}
                 {bekleyenSepetler.length === 0 && (
                   <tr>
-                    <td colSpan="3" className="text-center py-3">
+                    <td colSpan="4" className="text-center py-3">
                       Bekleyen sepet bulunmamaktadır.
                     </td>
                   </tr>

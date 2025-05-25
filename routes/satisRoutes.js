@@ -32,6 +32,18 @@ router.post('/', (req, res) => {
   try {
     console.log('Satış POST isteği alındı:', JSON.stringify(req.body, null, 2));
     
+    // İstek gövdesini doğrula
+    if (!req.body) {
+      console.error('Geçersiz istek formatı: İstek gövdesi boş.');
+      return res.status(400).json({ hata: 'Geçersiz istek formatı. İstek gövdesi boş.' });
+    }
+    
+    // Ürünler dizisini doğrula
+    if (!req.body.urunler || !Array.isArray(req.body.urunler) || req.body.urunler.length === 0) {
+      console.error('Geçersiz istek formatı: Ürünler dizisi bulunamadı veya boş.');
+      return res.status(400).json({ hata: 'Geçersiz istek formatı. Ürünler dizisi bulunamadı veya boş.' });
+    }
+    
     const db = global.DB.read();
     
     // Fiş numarası oluştur (basit bir şekilde)
@@ -44,22 +56,32 @@ router.post('/', (req, res) => {
     // Ürünleri işle
     for (const item of req.body.urunler) {
       // Client'dan gelen veri yapısına uygun özellik adlarını kullan
-      const urunId = item.urun || item.urunId; // İstemci "urun" veya "urunId" gönderebilir
-      const adet = item.miktar || item.adet; // İstemci "miktar" veya "adet" gönderebilir
+      const urunId = item.urunId; // İstemci "urun" veya "urunId" gönderebilir
+      const adet = item.miktar; // İstemci "miktar" veya "adet" gönderebilir
       
-      const urun = db.urunler.find(u => u.id === urunId);
+      if (!urunId) {
+        console.error('Ürün ID bilgisi eksik.');
+        return res.status(400).json({ hata: 'Ürün ID bilgisi eksik.' });
+      }
+      
+      if (!adet || isNaN(adet)) {
+        console.error('Geçersiz miktar bilgisi:', adet);
+        return res.status(400).json({ hata: 'Geçersiz miktar bilgisi.' });
+      }
+      
+      const urun = db.urunler.find(u => u.id === parseInt(urunId) || u.id === urunId);
       if (!urun) {
-        return res.status(404).json({ mesaj: `Ürün bulunamadı` });
+        console.error(`Ürün bulunamadı. ID: ${urunId}`);
+        return res.status(404).json({ mesaj: `Ürün bulunamadı. ID: ${urunId}` });
       }
       
-      // Stok kontrolü
-      if (urun.stokMiktari < adet) {
-        return res.status(400).json({ mesaj: `${urun.ad} için yeterli stok yok` });
-      }
+      console.log(`İşlenen ürün: ID=${urunId}, Adı=${urun.ad}, Adet=${adet}`);
       
       // String değerleri sayıya dönüştür
-      const birimFiyat = parseFloat(urun.fiyat);
+      const birimFiyat = parseFloat(item.birimFiyat || urun.fiyat) || 0;
       const kdvOrani = parseFloat(urun.kdvOrani || 0);
+      
+      console.log(`Fiyat bilgisi: Birim Fiyat=${birimFiyat}, KDV Oranı=${kdvOrani}`);
       
       // Ürün fiyatı KDV dahil olduğundan, KDV hariç birim fiyatı hesapla
       const birimFiyatHaricKDV = kdvOrani > 0 ? birimFiyat / (1 + (kdvOrani / 100)) : birimFiyat;
@@ -102,7 +124,7 @@ router.post('/', (req, res) => {
     // Yeni satış oluştur
     const yeniSatis = {
       id: db.satislar.length > 0 ? Math.max(...db.satislar.map(s => s.id)) + 1 : 1,
-      fisNo,
+      fisNo: fisNo || req.body.fisNo,
       tarih: new Date().toISOString(),
       urunler: satisUrunleri,
       araToplam: parseFloat(araToplam.toFixed(2)),
@@ -110,15 +132,24 @@ router.post('/', (req, res) => {
       toplamTutar: parseFloat(toplamTutar.toFixed(2)),
       odemeYontemi: req.body.odemeYontemi || 'Nakit',
       odemeDurumu: req.body.odemeDurumu || 'Ödendi',
+      musteri: req.body.musteri,
       createdAt: new Date().toISOString()
     };
     
+    console.log('Oluşturulan yeni satış:', JSON.stringify(yeniSatis, null, 2));
+    
     // Veritabanına ekle
     db.satislar.push(yeniSatis);
-    global.DB.write(db);
+    const yazmaBasarisi = global.DB.write(db);
+    
+    if (!yazmaBasarisi) {
+      console.error('Veritabanı yazma hatası oluştu!');
+      return res.status(500).json({ hata: 'Veritabanı yazma hatası' });
+    }
     
     res.status(201).json(yeniSatis);
   } catch (err) {
+    console.error('Satış kaydı hatası:', err);
     res.status(400).json({ hata: err.message });
   }
 });
@@ -217,6 +248,69 @@ router.get('/rapor/tarih', (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ hata: err.message });
+  }
+});
+
+// Belirtilen gün sayısı kadar eski satışları temizle
+router.delete('/temizle/:gun', (req, res) => {
+  try {
+    const gunSayisi = parseInt(req.params.gun, 10) || 5;
+    
+    // Günü doğrula
+    if (gunSayisi < 1) {
+      return res.status(400).json({ mesaj: 'Geçerli bir gün sayısı giriniz (en az 1)' });
+    }
+    
+    // Daha güvenli import yolu kullanma
+    const path = require('path');
+    const temizleyiciModul = require(path.join(__dirname, '..', 'utils', 'temizleyici'));
+    
+    // Temizleme işlemini başlat
+    const silinenAdet = temizleyiciModul.eskiSatislariTemizle(gunSayisi);
+    
+    res.json({ 
+      mesaj: `${gunSayisi} günden eski satışlar temizlendi.`, 
+      silinenAdet 
+    });
+  } catch (err) {
+    console.error('Satış temizleme hatası:', err);
+    res.status(500).json({ mesaj: 'Sunucu hatası', hata: err.message });
+  }
+});
+
+// Test amaçlı - Tüm satışları temizleme endpoint'i
+router.delete('/temizle-hepsi', async (req, res) => {
+  try {
+    console.log('TÜM SATIŞLAR TEMİZLENİYOR');
+    
+    // Asenkron dosya işlemleri modülünü kullan
+    const dosyaYonetimi = require('../utils/dosya-yonetimi');
+    
+    // Veritabanını oku
+    const db = await dosyaYonetimi.readDB();
+    
+    // Mevcut satış sayısı
+    const eskiSayisi = db.satislar.length;
+    console.log(`Mevcut satış sayısı: ${eskiSayisi}`);
+    
+    // Satışları temizle
+    db.satislar = [];
+    
+    // Veritabanına yaz
+    const yazmaBasarili = await dosyaYonetimi.writeDB(db);
+    console.log(`Veritabanı yazma sonucu: ${yazmaBasarili ? 'BAŞARILI' : 'BAŞARISIZ'}`);
+    
+    if (!yazmaBasarili) {
+      return res.status(500).json({ mesaj: 'Veritabanı yazma hatası' });
+    }
+    
+    res.json({ 
+      mesaj: 'Tüm satışlar başarıyla temizlendi', 
+      silinenAdet: eskiSayisi 
+    });
+  } catch (err) {
+    console.error('Tüm satışları temizleme hatası:', err);
+    res.status(500).json({ mesaj: 'Sunucu hatası', hata: err.message });
   }
 });
 

@@ -48,7 +48,7 @@ const Sidebar = ({ onToggle }) => {
         <li className={isActive('/kategoriler')}>
           <Link to="/kategoriler">
             <span className="icon"><FaTags /></span>
-            <span className="text">Kategori Yönetimi</span>
+            <span className="text">Kategoriler</span>
           </Link>
         </li>
         <li className={isActive('/satis')}>

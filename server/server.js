@@ -4,17 +4,21 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Route importları
-const satisRoutes = require('./routes/satisRoutes');
+const SatisController = require('./controllers/satisController');
 
 // Middleware'ler
 app.use(cors());
 app.use(express.json());
 
-// Route tanımlamaları
-app.use('/api/satislar', satisRoutes);
+// Router tanımlamalarını tamamen basit tutuyoruz
+// Satış rotası - doğrudan controller'a bağlıyoruz
+app.post('/api/satislar', SatisController.createSatis);
 
 // Veritabanı bağlantısı
-mongoose.connect('mongodb://localhost:27017/possatis')
+mongoose.connect('mongodb://127.0.0.1:27017/possatis', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => {
     console.log('MongoDB bağlantısı başarılı');
     // Sunucuyu başlat

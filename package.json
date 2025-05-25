@@ -24,7 +24,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.21.2",
     "mongoose": "^7.8.7",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-cron": "^4.0.5"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

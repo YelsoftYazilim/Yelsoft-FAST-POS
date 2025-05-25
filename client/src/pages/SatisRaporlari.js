@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Table, Form, Button, Alert } from 'react-bootstrap';
-import { FaSearch, FaFileExport, FaPrint, FaChartBar } from 'react-icons/fa';
-import axios from 'axios';
+import { Container, Row, Col, Card, Table, Form, Button, Alert, Modal } from 'react-bootstrap';
+import { FaSearch, FaFileExport, FaPrint, FaChartBar, FaTrash } from 'react-icons/fa';
+import api from '../utils/api';
 import { toast } from 'react-toastify';
 
 const SatisRaporlari = () => {
@@ -20,6 +20,10 @@ const SatisRaporlari = () => {
     baslangic: new Date().toISOString().split('T')[0], // Bugün
     bitis: new Date().toISOString().split('T')[0] // Bugün
   });
+
+  // Temizleme modal state
+  const [showTemizleModal, setShowTemizleModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Sayfa yüklendiğinde bugünün satışlarını getir
   useEffect(() => {
@@ -40,7 +44,7 @@ const SatisRaporlari = () => {
     setYukleniyor(true);
     try {
       const { baslangic, bitis } = tarihFiltresi;
-      const response = await axios.get(`/api/satislar/rapor/tarih?baslangic=${baslangic}&bitis=${bitis}`);
+      const response = await api.get(`satislar/rapor/tarih?baslangic=${baslangic}&bitis=${bitis}`);
       
       setSatislar(response.data.satislar);
       // API'den gelen veriyi doğru şekilde eşleştir
@@ -104,6 +108,24 @@ const SatisRaporlari = () => {
     }
   };
 
+  // Tüm satışları temizleme fonksiyonu
+  const tumSatislariTemizle = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.delete('satislar/temizle-hepsi');
+      toast.success(response.data.mesaj);
+      
+      // Verileri yeniden yükle
+      satislariGetir();
+      setShowTemizleModal(false);
+    } catch (error) {
+      console.error('Tüm satışları temizleme hatası:', error);
+      toast.error(error.response?.data?.mesaj || 'Satış temizleme işlemi başarısız oldu');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Container fluid>
       <h1 className="mb-4">Satış Raporları</h1>
@@ -112,7 +134,7 @@ const SatisRaporlari = () => {
         <Card.Body>
           <Form>
             <Row className="align-items-end">
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Başlangıç Tarihi</Form.Label>
                   <Form.Control
@@ -123,7 +145,7 @@ const SatisRaporlari = () => {
                   />
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Bitiş Tarihi</Form.Label>
                   <Form.Control
@@ -134,16 +156,25 @@ const SatisRaporlari = () => {
                   />
                 </Form.Group>
               </Col>
-              <Col md={4}>
-                <div className="d-flex gap-2">
-                  <Button variant="primary" onClick={satislariGetir}>
-                    <FaSearch className="me-1" /> Filtrele
-                  </Button>
-                  <Button variant="outline-secondary" onClick={raporuDisaAktar}>
-                    <FaFileExport className="me-1" /> Dışa Aktar
-                  </Button>
-                  <Button variant="outline-secondary" onClick={raporuYazdir}>
-                    <FaPrint className="me-1" /> Yazdır
+              <Col md={6}>
+                <div className="d-flex gap-2 justify-content-between">
+                  <div>
+                    <Button variant="primary" onClick={satislariGetir}>
+                      <FaSearch className="me-1" /> Filtrele
+                    </Button>
+                    <Button variant="outline-secondary" onClick={raporuDisaAktar} className="ms-2">
+                      <FaFileExport className="me-1" /> Dışa Aktar
+                    </Button>
+                    <Button variant="outline-secondary" onClick={raporuYazdir} className="ms-2">
+                      <FaPrint className="me-1" /> Yazdır
+                    </Button>
+                  </div>
+                  <Button 
+                    variant="danger"
+                    onClick={() => setShowTemizleModal(true)}
+                    className="ms-2"
+                  >
+                    <FaTrash className="me-1" /> Tüm Satışları Temizle
                   </Button>
                 </div>
               </Col>
@@ -254,6 +285,31 @@ const SatisRaporlari = () => {
           )}
         </Card.Body>
       </Card>
+
+      {/* Temizleme Modal */}
+      <Modal show={showTemizleModal} onHide={() => setShowTemizleModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Tüm Satışları Temizle</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="alert alert-danger">
+            <strong>DİKKAT!</strong> Bu işlem TÜM satış verilerini kalıcı olarak silecektir. Bu işlem geri alınamaz!
+          </div>
+          <p>Tüm satış verileri sistemden silinecektir. Devam etmek istediğinize emin misiniz?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowTemizleModal(false)}>
+            İptal
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={tumSatislariTemizle}
+            disabled={isLoading}
+          >
+            {isLoading ? 'İşleniyor...' : 'Tüm Satışları Temizle'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

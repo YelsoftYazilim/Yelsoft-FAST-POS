@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Button, Form, ListGroup, Badge, InputGroup, Alert } from 'react-bootstrap';
-import { FaPlus, FaEdit, FaTrash, FaLayerGroup, FaTags, FaArrowRight } from 'react-icons/fa';
-import axios from 'axios';
+import { FaPlus, FaEdit, FaTrash, FaLayerGroup, FaTags, FaArrowRight, FaKeyboard } from 'react-icons/fa';
+import api from '../utils/api';
+import { toast } from 'react-toastify';
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
 
 const KategoriYonetimi = () => {
   // State tanımları
@@ -19,12 +22,70 @@ const KategoriYonetimi = () => {
   const [yukleniyor, setYukleniyor] = useState(false);
   const [hata, setHata] = useState(null);
   const [basarili, setBasarili] = useState(null);
+
+  // Sanal klavye için state'ler
+  const [klavyeGoster, setKlavyeGoster] = useState(false);
+  const [aktifInput, setAktifInput] = useState('');
+  const klavyeRef = useRef(null);
+  
+  // Klavye için input değişikliği
+  const handleInputFocus = (inputName, defaultValue = '') => {
+    setAktifInput(inputName);
+    setKlavyeGoster(true);
+  };
+
+  // Klavyeden tuş basıldığında
+  const onKeyPress = (button) => {
+    console.log("Basılan tuş:", button);
+    
+    // Backspace tuşuna basıldıysa
+    if (button === "{bksp}") {
+      onKeyPressBackspace();
+      return;
+    }
+    
+    if (aktifInput === 'kategoriAd') {
+      setYeniKategori({...yeniKategori, ad: yeniKategori.ad + button});
+    } else if (aktifInput === 'kategoriAciklama') {
+      setYeniKategori({...yeniKategori, aciklama: yeniKategori.aciklama + button});
+    } else if (aktifInput === 'altKategoriAd') {
+      setYeniAltKategori({...yeniAltKategori, ad: yeniAltKategori.ad + button});
+    } else if (aktifInput === 'altKategoriAciklama') {
+      setYeniAltKategori({...yeniAltKategori, aciklama: yeniAltKategori.aciklama + button});
+    }
+  };
+  
+  // Klavyeden silme tuşu
+  const onKeyPressBackspace = () => {
+    if (aktifInput === 'kategoriAd') {
+      setYeniKategori({...yeniKategori, ad: yeniKategori.ad.slice(0, -1)});
+    } else if (aktifInput === 'kategoriAciklama') {
+      setYeniKategori({...yeniKategori, aciklama: yeniKategori.aciklama.slice(0, -1)});
+    } else if (aktifInput === 'altKategoriAd') {
+      setYeniAltKategori({...yeniAltKategori, ad: yeniAltKategori.ad.slice(0, -1)});
+    } else if (aktifInput === 'altKategoriAciklama') {
+      setYeniAltKategori({...yeniAltKategori, aciklama: yeniAltKategori.aciklama.slice(0, -1)});
+    }
+  };
+
+  // Klavye için değişiklik
+  const onChange = (input) => {
+    if (aktifInput === 'kategoriAd') {
+      setYeniKategori({...yeniKategori, ad: input});
+    } else if (aktifInput === 'kategoriAciklama') {
+      setYeniKategori({...yeniKategori, aciklama: input});
+    } else if (aktifInput === 'altKategoriAd') {
+      setYeniAltKategori({...yeniAltKategori, ad: input});
+    } else if (aktifInput === 'altKategoriAciklama') {
+      setYeniAltKategori({...yeniAltKategori, aciklama: input});
+    }
+  };
   
   // Kategorileri yükle
   const kategorileriYukle = async () => {
     try {
       setYukleniyor(true);
-      const res = await axios.get('/api/kategoriler');
+      const res = await api.get('kategoriler');
       setKategoriler(res.data);
       setHata(null);
     } catch (err) {
@@ -39,11 +100,11 @@ const KategoriYonetimi = () => {
   const altKategorileriYukle = async (kategoriId = null) => {
     try {
       setYukleniyor(true);
-      let url = '/api/kategoriler/alt-kategori/tumu';
+      let url = 'kategoriler/alt-kategori/tumu';
       if (kategoriId) {
-        url = `/api/kategoriler/${kategoriId}/alt-kategoriler`;
+        url = `kategoriler/${kategoriId}/alt-kategoriler`;
       }
-      const res = await axios.get(url);
+      const res = await api.get(url);
       setAltKategoriler(res.data);
       setHata(null);
     } catch (err) {
@@ -89,10 +150,10 @@ const KategoriYonetimi = () => {
       let res;
       
       if (duzenlemeModu && secilenKategori) {
-        res = await axios.put(`/api/kategoriler/${secilenKategori.id}`, yeniKategori);
+        res = await api.put(`kategoriler/${secilenKategori.id}`, yeniKategori);
         setBasarili('Kategori başarıyla güncellendi');
       } else {
-        res = await axios.post('/api/kategoriler', yeniKategori);
+        res = await api.post('kategoriler', yeniKategori);
         setBasarili('Kategori başarıyla eklendi');
       }
       
@@ -116,7 +177,7 @@ const KategoriYonetimi = () => {
     
     try {
       setYukleniyor(true);
-      await axios.delete(`/api/kategoriler/${kategoriId}`);
+      await api.delete(`kategoriler/${kategoriId}`);
       setBasarili('Kategori başarıyla silindi');
       kategorileriYukle();
       setSecilenKategori(null);
@@ -157,10 +218,10 @@ const KategoriYonetimi = () => {
       let res;
       
       if (altKategoriDuzenlemeModu && secilenAltKategori) {
-        res = await axios.put(`/api/kategoriler/alt-kategori/${secilenAltKategori.id}`, yeniAltKategori);
+        res = await api.put(`kategoriler/alt-kategori/${secilenAltKategori.id}`, yeniAltKategori);
         setBasarili('Alt kategori başarıyla güncellendi');
       } else {
-        res = await axios.post('/api/kategoriler/alt-kategori', yeniAltKategori);
+        res = await api.post('kategoriler/alt-kategori', yeniAltKategori);
         setBasarili('Alt kategori başarıyla eklendi');
       }
       
@@ -190,7 +251,7 @@ const KategoriYonetimi = () => {
     
     try {
       setYukleniyor(true);
-      await axios.delete(`/api/kategoriler/alt-kategori/${altKategoriId}`);
+      await api.delete(`kategoriler/alt-kategori/${altKategoriId}`);
       setBasarili('Alt kategori başarıyla silindi');
       
       if (secilenKategori) {
@@ -240,10 +301,6 @@ const KategoriYonetimi = () => {
   
   return (
     <Container fluid className="mt-4">
-      <h1 className="mb-4">
-        <FaTags className="me-2" /> Kategori Yönetimi
-      </h1>
-      
       {hata && (
         <Alert variant="danger" onClose={() => setHata(null)} dismissible>
           <Alert.Heading>Hata!</Alert.Heading>
@@ -258,71 +315,62 @@ const KategoriYonetimi = () => {
         </Alert>
       )}
       
-      <Row className="mb-4">
-        {/* Ana Kategori Bölümü */}
+      <Row>
         <Col md={6}>
-          <Card className="shadow-sm">
+          <Card className="mb-4">
             <Card.Header className="bg-primary text-white">
-              <h4 className="mb-0"><FaTags className="me-2" /> Ana Kategoriler</h4>
+              <FaTags className="me-2" /> Ana Kategoriler
             </Card.Header>
             <Card.Body>
               <Form className="mb-4">
-                <Card className="mb-3">
-                  <Card.Header className="bg-light">
-                    <h5 className="mb-0">{duzenlemeModu ? 'Kategori Düzenle' : 'Yeni Kategori Ekle'}</h5>
-                  </Card.Header>
-                  <Card.Body>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Kategori Adı <span className="text-danger">*</span></Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={yeniKategori.ad}
-                        onChange={(e) => setYeniKategori({ ...yeniKategori, ad: e.target.value })}
-                        placeholder="Kategori adı"
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Açıklama</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={2}
-                        value={yeniKategori.aciklama}
-                        onChange={(e) => setYeniKategori({ ...yeniKategori, aciklama: e.target.value })}
-                        placeholder="Açıklama (isteğe bağlı)"
-                      />
-                    </Form.Group>
-                    <div className="d-flex justify-content-end">
-                      <Button 
-                        variant="secondary" 
-                        className="me-2" 
-                        disabled={yukleniyor}
-                        onClick={() => formuTemizle('kategori')}
-                      >
-                        İptal
-                      </Button>
-                      <Button 
-                        variant="primary" 
-                        onClick={kategoriEkle}
-                        disabled={yukleniyor}
-                      >
-                        {yukleniyor ? 'İşleniyor...' : duzenlemeModu ? 'Güncelle' : 'Ekle'} <FaPlus className="ms-1" />
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
+                <Form.Group className="mb-3">
+                  <Form.Label>Kategori Adı *</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={yeniKategori.ad}
+                    onChange={(e) => setYeniKategori({ ...yeniKategori, ad: e.target.value })}
+                    onFocus={() => handleInputFocus('kategoriAd')}
+                    placeholder="Kategori adı"
+                    required
+                  />
+                </Form.Group>
+                
+                <Form.Group className="mb-3">
+                  <Form.Label>Açıklama</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={yeniKategori.aciklama}
+                    onChange={(e) => setYeniKategori({ ...yeniKategori, aciklama: e.target.value })}
+                    onFocus={() => handleInputFocus('kategoriAciklama')}
+                    placeholder="Açıklama (isteğe bağlı)"
+                  />
+                </Form.Group>
+                
+                <div className="d-flex gap-2 justify-content-end">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => formuTemizle('kategori')}
+                  >
+                    İptal
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={kategoriEkle}
+                    disabled={yukleniyor}
+                  >
+                    {yukleniyor ? 'Kaydediliyor...' : duzenlemeModu ? 'Güncelle' : 'Ekle'}
+                  </Button>
+                </div>
               </Form>
               
-              {yukleniyor ? (
-                <div className="text-center py-3">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Yükleniyor...</span>
-                  </div>
-                </div>
-              ) : kategoriler.length === 0 ? (
-                <Alert variant="info">Henüz hiç kategori bulunmuyor.</Alert>
-              ) : (
-                <ListGroup>
-                  {kategoriler.map((kategori) => (
+              <hr />
+              
+              <ListGroup>
+                {kategoriler.length === 0 ? (
+                  <Alert variant="info">Henüz kategori bulunmuyor.</Alert>
+                ) : (
+                  kategoriler.map(kategori => (
                     <ListGroup.Item
                       key={kategori.id}
                       action
@@ -331,20 +379,20 @@ const KategoriYonetimi = () => {
                       className="d-flex justify-content-between align-items-center"
                     >
                       <div>
-                        <strong>{kategori.ad}</strong>
-                        {kategori.aciklama && <p className="mb-0 small text-muted">{kategori.aciklama}</p>}
+                        <div>{kategori.ad}</div>
+                        {kategori.aciklama && <small className="text-muted">{kategori.aciklama}</small>}
                       </div>
                       <div>
-                        <Button 
-                          variant="outline-primary" 
-                          size="sm" 
-                          className="me-2"
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          className="me-1"
                           onClick={(e) => kategoriDuzenle(kategori, e)}
                         >
                           <FaEdit />
                         </Button>
-                        <Button 
-                          variant="outline-danger" 
+                        <Button
+                          variant="outline-danger"
                           size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -355,156 +403,182 @@ const KategoriYonetimi = () => {
                         </Button>
                       </div>
                     </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
+                  ))
+                )}
+              </ListGroup>
             </Card.Body>
           </Card>
         </Col>
         
-        {/* Alt Kategori Bölümü */}
         <Col md={6}>
-          <Card className="shadow-sm">
+          <Card className="mb-4">
             <Card.Header className="bg-info text-white">
-              <h4 className="mb-0"><FaLayerGroup className="me-2" /> Alt Kategoriler</h4>
+              <FaLayerGroup className="me-2" /> Alt Kategoriler
             </Card.Header>
             <Card.Body>
               <Form className="mb-4">
-                <Card className="mb-3">
-                  <Card.Header className="bg-light">
-                    <h5 className="mb-0">{altKategoriDuzenlemeModu ? 'Alt Kategori Düzenle' : 'Yeni Alt Kategori Ekle'}</h5>
-                  </Card.Header>
-                  <Card.Body>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Ana Kategori <span className="text-danger">*</span></Form.Label>
-                      <Form.Select
-                        value={yeniAltKategori.kategoriId}
-                        onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, kategoriId: e.target.value })}
-                      >
-                        <option value="">-- Kategori Seçin --</option>
-                        {kategoriler.map((kategori) => (
-                          <option key={kategori.id} value={kategori.id}>
-                            {kategori.ad}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Alt Kategori Adı <span className="text-danger">*</span></Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={yeniAltKategori.ad}
-                        onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, ad: e.target.value })}
-                        placeholder="Alt kategori adı"
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Açıklama</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={2}
-                        value={yeniAltKategori.aciklama}
-                        onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, aciklama: e.target.value })}
-                        placeholder="Açıklama (isteğe bağlı)"
-                      />
-                    </Form.Group>
-                    <div className="d-flex justify-content-end">
-                      <Button 
-                        variant="secondary" 
-                        className="me-2"
-                        disabled={yukleniyor}
-                        onClick={() => formuTemizle('altKategori')}
-                      >
-                        İptal
-                      </Button>
-                      <Button 
-                        variant="info" 
-                        onClick={altKategoriEkle}
-                        disabled={yukleniyor}
-                      >
-                        {yukleniyor ? 'İşleniyor...' : altKategoriDuzenlemeModu ? 'Güncelle' : 'Ekle'} <FaPlus className="ms-1" />
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
+                <Form.Group className="mb-3">
+                  <Form.Label>Ana Kategori *</Form.Label>
+                  <Form.Select
+                    value={yeniAltKategori.kategoriId}
+                    onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, kategoriId: e.target.value })}
+                  >
+                    <option value="">-- Kategori Seçin --</option>
+                    {kategoriler.map(kategori => (
+                      <option key={kategori.id} value={kategori.id}>{kategori.ad}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                
+                <Form.Group className="mb-3">
+                  <Form.Label>Alt Kategori Adı *</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={yeniAltKategori.ad}
+                    onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, ad: e.target.value })}
+                    onFocus={() => handleInputFocus('altKategoriAd')}
+                    placeholder="Alt kategori adı"
+                    required
+                  />
+                </Form.Group>
+                
+                <Form.Group className="mb-3">
+                  <Form.Label>Açıklama</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={yeniAltKategori.aciklama}
+                    onChange={(e) => setYeniAltKategori({ ...yeniAltKategori, aciklama: e.target.value })}
+                    onFocus={() => handleInputFocus('altKategoriAciklama')}
+                    placeholder="Açıklama (isteğe bağlı)"
+                  />
+                </Form.Group>
+                
+                <div className="d-flex gap-2 justify-content-end">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => formuTemizle('altKategori')}
+                  >
+                    İptal
+                  </Button>
+                  <Button
+                    variant="info"
+                    onClick={altKategoriEkle}
+                    disabled={yukleniyor}
+                  >
+                    {yukleniyor ? 'Kaydediliyor...' : altKategoriDuzenlemeModu ? 'Güncelle' : 'Ekle'}
+                  </Button>
+                </div>
               </Form>
               
-              {secilenKategori && (
-                <Alert variant="primary" className="d-flex align-items-center">
-                  <div>
-                    <strong>Seçili Kategori:</strong> {secilenKategori.ad}
-                    <div>
-                      <Button 
-                        variant="link" 
-                        size="sm" 
-                        className="p-0 text-decoration-none" 
-                        onClick={() => {
-                          setSecilenKategori(null);
-                          altKategorileriYukle();
-                        }}
-                      >
-                        Tüm Alt Kategorileri Göster
-                      </Button>
-                    </div>
-                  </div>
-                </Alert>
-              )}
+              <hr />
               
-              {yukleniyor ? (
-                <div className="text-center py-3">
-                  <div className="spinner-border text-info" role="status">
-                    <span className="visually-hidden">Yükleniyor...</span>
-                  </div>
-                </div>
-              ) : altKategoriler.length === 0 ? (
-                <Alert variant="info">
-                  {secilenKategori ? 
-                    `"${secilenKategori.ad}" kategorisine bağlı alt kategori bulunmuyor.` : 
-                    'Henüz hiç alt kategori bulunmuyor.'}
-                </Alert>
-              ) : (
-                <ListGroup>
-                  {altKategoriler.map((altKategori) => (
-                    <ListGroup.Item
-                      key={altKategori.id}
-                      action
-                      active={secilenAltKategori && secilenAltKategori.id === altKategori.id}
-                      className="d-flex justify-content-between align-items-center"
-                    >
-                      <div>
-                        <strong>{altKategori.ad}</strong>
-                        {!secilenKategori && (
-                          <Badge bg="primary" className="ms-2">
-                            {kategoriler.find(k => k.id === parseInt(altKategori.kategoriId))?.ad || 'Kategori Yok'}
-                          </Badge>
-                        )}
-                        {altKategori.aciklama && <p className="mb-0 small text-muted">{altKategori.aciklama}</p>}
-                      </div>
-                      <div>
-                        <Button 
-                          variant="outline-primary" 
-                          size="sm" 
-                          className="me-2"
-                          onClick={(e) => altKategoriDuzenle(altKategori, e)}
+              <ListGroup>
+                {secilenKategori ? (
+                  altKategoriler.filter(alt => alt.kategoriId === secilenKategori.id).length === 0 ? (
+                    <Alert variant="info">Bu kategoriye ait alt kategori bulunmuyor.</Alert>
+                  ) : (
+                    altKategoriler
+                      .filter(alt => alt.kategoriId === secilenKategori.id)
+                      .map(altKat => (
+                        <ListGroup.Item
+                          key={altKat.id}
+                          action
+                          active={secilenAltKategori && secilenAltKategori.id === altKat.id}
+                          onClick={() => setSecilenAltKategori(altKat)}
+                          className="d-flex justify-content-between align-items-center"
                         >
-                          <FaEdit />
-                        </Button>
-                        <Button 
-                          variant="outline-danger" 
-                          size="sm"
-                          onClick={(e) => altKategoriSil(altKategori.id, e)}
-                        >
-                          <FaTrash />
-                        </Button>
-                      </div>
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
+                          <div>
+                            <div>{altKat.ad}</div>
+                            {altKat.aciklama && <small className="text-muted">{altKat.aciklama}</small>}
+                          </div>
+                          <div>
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              className="me-1"
+                              onClick={(e) => altKategoriDuzenle(altKat, e)}
+                            >
+                              <FaEdit />
+                            </Button>
+                            <Button
+                              variant="outline-danger"
+                              size="sm"
+                              onClick={(e) => altKategoriSil(altKat.id, e)}
+                            >
+                              <FaTrash />
+                            </Button>
+                          </div>
+                        </ListGroup.Item>
+                      ))
+                  )
+                ) : (
+                  <Alert variant="warning">Alt kategorileri görmek için bir kategori seçin.</Alert>
+                )}
+              </ListGroup>
             </Card.Body>
           </Card>
         </Col>
       </Row>
+
+      {klavyeGoster && (
+        <Card style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1050,
+          width: '100%',
+          maxWidth: '100%',
+          margin: 0,
+          borderRadius: '0'
+        }}>
+          <Card.Header className="d-flex justify-content-between align-items-center bg-dark text-white py-2">
+            <span><FaKeyboard className="me-2" /> Sanal Klavye</span>
+            <Button 
+              variant="outline-light" 
+              size="sm" 
+              onClick={() => setKlavyeGoster(false)}
+            >
+              Kapat
+            </Button>
+          </Card.Header>
+          <Card.Body className="py-2">
+            <Keyboard
+              keyboardRef={r => (klavyeRef.current = r)}
+              layoutName="default"
+              layout={{
+                default: [
+                  "1 2 3 4 5 6 7 8 9 0 {bksp}",
+                  "Q W E R T Y U I O P Ğ Ü",
+                  "A S D F G H J K L Ş İ",
+                  "Z X C V B N M Ö Ç ."
+                ]
+              }}
+              onKeyPress={onKeyPress}
+              onChange={onChange}
+              display={{
+                '{bksp}': '⌫ Sil'
+              }}
+              buttonTheme={[
+                {
+                  class: "hg-red",
+                  buttons: "{bksp}"
+                }
+              ]}
+              theme="hg-theme-default hg-layout-default myTheme"
+              buttonAttributes={{
+                style: {
+                  fontSize: '1.2rem',
+                  padding: '15px 5px',
+                  minWidth: '40px',
+                  height: '50px'
+                }
+              }}
+            />
+          </Card.Body>
+        </Card>
+      )}
     </Container>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Table, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table, Badge, Button } from 'react-bootstrap';
 import { FaShoppingCart, FaBoxOpen, FaMoneyBillWave, FaChartLine } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
+import { toast } from 'react-toastify';
 
 const Dashboard = () => {
   const [ozet, setOzet] = useState({
@@ -17,11 +18,11 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         // Ürün verilerini getir
-        const urunlerRes = await axios.get('/api/urunler');
+        const urunlerRes = await api.get('urunler');
         const urunler = urunlerRes.data;
         
         // Satış verilerini getir
-        const satislarRes = await axios.get('/api/satislar');
+        const satislarRes = await api.get('satislar');
         const satislar = satislarRes.data;
         
         // Bugünün satışlarını filtrele
@@ -89,9 +90,27 @@ const Dashboard = () => {
     return tarih.toLocaleDateString('tr-TR') + ' ' + tarih.toLocaleTimeString('tr-TR', {hour: '2-digit', minute: '2-digit'});
   };
 
+  // Stokları sıfırla fonksiyonu
+  const stoklariSifirlaHandler = async () => {
+    if (!window.confirm('Tüm stoklar sıfırlanacak. Emin misiniz?')) return;
+    try {
+      await api.post('urunler/stok-sifirla');
+      toast.success('Tüm stoklar sıfırlandı!');
+      // Stokları tekrar çek
+      const urunlerRes = await api.get('urunler');
+      const urunler = urunlerRes.data;
+      setStokDurumu(urunler.sort((a, b) => a.stokMiktari - b.stokMiktari).slice(0, 10));
+    } catch (err) {
+      toast.error('Stoklar sıfırlanırken hata oluştu!');
+    }
+  };
+
   return (
-    <Container fluid>
-      <h1 className="mb-4">Ana Sayfa</h1>
+    <Container fluid className="my-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="mb-0">Ana Sayfa</h1>
+        <Button variant="danger" onClick={stoklariSifirlaHandler}>Stokları Sıfırla</Button>
+      </div>
       
       <Row>
         <Col md={3} sm={6} className="mb-4">

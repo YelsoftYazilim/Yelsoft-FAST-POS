@@ -264,9 +264,19 @@
 }
 
 .barkod-input {
-  font-size: 1.2rem;
-  padding: 10px;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  padding: 6px 10px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.barkod-btn {
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  padding: 0 8px !important;
 }
 
 /* Buton Stilleri */
@@ -432,4 +442,38 @@
 
 .sepet-satir:hover {
   background-color: #f8f9fa;
+}
+
+/* Barkod Numpad Stilleri */
+.barkod-numpad {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 6px;
+  background-color: #f8f9fa;
+}
+
+.barkod-numpad .numpad-btn {
+  height: 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 1px;
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.barkod-numpad .numpad-row {
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.barkod-numpad h6 {
+  font-size: 0.8rem;
+  margin-bottom: 3px;
+}
+
+.barkod-numpad .numpad-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }

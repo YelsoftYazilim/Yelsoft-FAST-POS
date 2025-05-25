@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Button, Form, Modal } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import { toast } from 'react-toastify';
 
 const OdemeTipleri = () => {
@@ -24,7 +24,7 @@ const OdemeTipleri = () => {
   const odemeTipleriniGetir = async () => {
     setYukleniyor(true);
     try {
-      const response = await axios.get('/api/odeme-tipleri');
+      const response = await api.get('odeme-tipleri');
       setOdemeTipleri(response.data);
       setHata(null);
     } catch (error) {
@@ -106,11 +106,11 @@ const OdemeTipleri = () => {
     try {
       if (duzenlemeModu && seciliOdemeTipi) {
         // Ödeme tipi güncelleme
-        await axios.put(`/api/odeme-tipleri/${seciliOdemeTipi.id}`, formData);
+        await api.put(`odeme-tipleri/${seciliOdemeTipi.id}`, formData);
         toast.success('Ödeme tipi başarıyla güncellendi.');
       } else {
         // Yeni ödeme tipi ekleme
-        await axios.post('/api/odeme-tipleri', formData);
+        await api.post('odeme-tipleri', formData);
         toast.success('Ödeme tipi başarıyla eklendi.');
       }
       
@@ -143,7 +143,7 @@ const OdemeTipleri = () => {
   const odemeTipiSil = async (odemeTipiId) => {
     if (window.confirm('Bu ödeme tipini silmek istediğinizden emin misiniz?')) {
       try {
-        await axios.delete(`/api/odeme-tipleri/${odemeTipiId}`);
+        await api.delete(`odeme-tipleri/${odemeTipiId}`);
         toast.success('Ödeme tipi başarıyla silindi.');
         odemeTipleriniGetir();
       } catch (error) {

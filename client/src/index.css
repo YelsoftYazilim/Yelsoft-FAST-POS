@@ -33,3 +33,33 @@ code {
     width: 100%;
   }
 }
+
+/* Sanal Klavye Stilleri */
+.simple-keyboard {
+  width: 100%;
+}
+
+.simple-keyboard .hg-button {
+  height: 50px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.simple-keyboard .hg-red {
+  background-color: #ff5252;
+  color: white;
+}
+
+.hg-theme-default {
+  width: 100%;
+  user-select: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  touch-action: manipulation;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: 2px solid #ddd;
+}

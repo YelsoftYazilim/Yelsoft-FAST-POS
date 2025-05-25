@@ -1,5 +1,7 @@
 # PosSatis - Satış Noktası Uygulaması
 
+DÜNYA AÇIK KAYNAK KODU DESTEKLEYEN YAZILIMCILAR SAYESİNDE DÖNÜYOR. BİZİMDE UFAK BİR KATKIMIZ OLSUN. PROJEYE DEĞİL İMPLEMANTASYONA PARA ÖDENMELİDİR.
+
 ## Uygulama Hakkında
 PosSatis, küçük işletmeler için geliştirilmiş bir satış noktası (POS) uygulamasıdır. Ürün satışı, stok takibi, kategori yönetimi ve satış raporları gibi temel işlemleri destekler.
 
