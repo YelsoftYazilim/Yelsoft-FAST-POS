@@ -1,0 +1,621 @@
+{
+  "urunler": [
+    {
+      "id": 5,
+      "barkod": "5555",
+      "ad": "EFES BİRA",
+      "fiyat": 973.4,
+      "kdvOrani": "0",
+      "stokMiktari": -16,
+      "birim": "Adet",
+      "kategoriId": 3,
+      "altKategoriId": 3,
+      "vitrin": false,
+      "createdAt": "2025-05-19T20:16:16.931Z",
+      "updatedAt": "2025-05-24T13:57:43.705Z",
+      "stok": null
+    },
+    {
+      "id": 6,
+      "barkod": "6666",
+      "ad": "TUBORG BİRA",
+      "fiyat": 844.5,
+      "kdvOrani": "0",
+      "stokMiktari": -6,
+      "birim": "Adet",
+      "kategoriId": 3,
+      "altKategoriId": 4,
+      "vitrin": false,
+      "createdAt": "2025-05-19T20:16:58.381Z",
+      "updatedAt": "2025-05-24T13:57:43.705Z"
+    },
+    {
+      "id": 7,
+      "barkod": "123",
+      "ad": "SU",
+      "fiyat": "10",
+      "kdvOrani": "0",
+      "stokMiktari": -5,
+      "birim": "Adet",
+      "kategoriId": 7,
+      "altKategoriId": 5,
+      "vitrin": true,
+      "createdAt": "2025-05-24T12:35:40.832Z"
+    },
+    {
+      "id": 8,
+      "barkod": "11111111",
+      "ad": "WİNSTON BLUE",
+      "fiyat": "83",
+      "kdvOrani": "0",
+      "stokMiktari": -2,
+      "birim": "Adet",
+      "kategoriId": 8,
+      "altKategoriId": 7,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:43:52.864Z"
+    },
+    {
+      "id": 9,
+      "barkod": "11111115",
+      "ad": "MARLBORO TOUCH",
+      "fiyat": "85",
+      "kdvOrani": "0",
+      "stokMiktari": -6,
+      "birim": "Adet",
+      "kategoriId": 8,
+      "altKategoriId": 8,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:44:29.808Z"
+    },
+    {
+      "id": 10,
+      "barkod": "11111113",
+      "ad": "TEKEL 2000",
+      "fiyat": "77",
+      "kdvOrani": "0",
+      "stokMiktari": -6,
+      "birim": "Adet",
+      "kategoriId": 8,
+      "altKategoriId": 6,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:45:10.261Z"
+    },
+    {
+      "id": 11,
+      "barkod": "22222221",
+      "ad": "YER FISTIĞI",
+      "fiyat": "50",
+      "kdvOrani": "0",
+      "stokMiktari": -4,
+      "birim": "Adet",
+      "kategoriId": 6,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:46:06.662Z"
+    },
+    {
+      "id": 12,
+      "barkod": "132564",
+      "ad": "EKMEK",
+      "fiyat": "20",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": true,
+      "createdAt": "2025-05-24T13:46:30.124Z"
+    },
+    {
+      "id": 13,
+      "barkod": "1578469",
+      "ad": "SAKIZ",
+      "fiyat": "5",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": true,
+      "createdAt": "2025-05-24T13:46:49.525Z"
+    },
+    {
+      "id": 14,
+      "barkod": "22222222",
+      "ad": "ÇEKİRDEK",
+      "fiyat": "65",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 6,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:47:17.152Z"
+    },
+    {
+      "id": 15,
+      "barkod": "2134546",
+      "ad": "CARLSBERG",
+      "fiyat": "95",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 3,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:48:07.055Z"
+    },
+    {
+      "id": 16,
+      "barkod": "68459731",
+      "ad": "KOLA",
+      "fiyat": "75",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 7,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:48:41.067Z"
+    },
+    {
+      "id": 17,
+      "barkod": "8465795",
+      "ad": "LAYS",
+      "fiyat": "50",
+      "kdvOrani": "0",
+      "stokMiktari": -2,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:49:18.076Z"
+    },
+    {
+      "id": 18,
+      "barkod": "456489",
+      "ad": "TADELLE",
+      "fiyat": "70",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:49:45.137Z"
+    },
+    {
+      "id": 19,
+      "barkod": "54984654",
+      "ad": "TOKAİ",
+      "fiyat": "30",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 9,
+      "altKategoriId": null,
+      "vitrin": true,
+      "createdAt": "2025-05-24T13:51:17.326Z"
+    },
+    {
+      "id": 20,
+      "barkod": "486487948",
+      "ad": "ICE TEA",
+      "fiyat": "60",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 7,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:52:27.845Z"
+    },
+    {
+      "id": 21,
+      "barkod": "654894",
+      "ad": "FINDIK",
+      "fiyat": "90",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 6,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:53:07.741Z"
+    },
+    {
+      "id": 22,
+      "barkod": "5649886",
+      "ad": "LUKANKA",
+      "fiyat": "130",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:53:29.567Z"
+    },
+    {
+      "id": 23,
+      "barkod": "854692",
+      "ad": "YOĞURT",
+      "fiyat": "50",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:54:14.006Z"
+    },
+    {
+      "id": 24,
+      "barkod": "7468519",
+      "ad": "SÜT",
+      "fiyat": "50",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 7,
+      "altKategoriId": null,
+      "vitrin": true,
+      "createdAt": "2025-05-24T13:54:33.857Z"
+    },
+    {
+      "id": 25,
+      "barkod": "456193",
+      "ad": "ENERJİ İÇECEĞİ",
+      "fiyat": "90",
+      "kdvOrani": "0",
+      "stokMiktari": 0,
+      "birim": "Adet",
+      "kategoriId": 7,
+      "altKategoriId": null,
+      "vitrin": false,
+      "createdAt": "2025-05-24T13:56:31.330Z"
+    },
+    {
+      "id": 26,
+      "barkod": "9999877",
+      "ad": "lolipop",
+      "fiyat": "26",
+      "kdvOrani": "0",
+      "stokMiktari": "0",
+      "birim": "Adet",
+      "kategoriId": 5,
+      "altKategoriId": null,
+      "vitrin": true,
+      "createdAt": "2025-05-25T20:25:37.588Z"
+    }
+  ],
+  "satislar": [
+    {
+      "id": 1,
+      "fisNo": "FIS-1748204755632",
+      "tarih": "2025-05-25T20:25:55.632Z",
+      "urunler": [
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 2,
+          "birimFiyat": 973.4,
+          "birimFiyatHaricKDV": 973.4,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 1946.8
+        },
+        {
+          "urunId": 6,
+          "urunAdi": "TUBORG BİRA",
+          "adet": 2,
+          "birimFiyat": 844.5,
+          "birimFiyatHaricKDV": 844.5,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 1689
+        },
+        {
+          "urunId": 10,
+          "urunAdi": "TEKEL 2000",
+          "adet": 2,
+          "birimFiyat": 77,
+          "birimFiyatHaricKDV": 77,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 154
+        },
+        {
+          "urunId": 9,
+          "urunAdi": "MARLBORO TOUCH",
+          "adet": 1,
+          "birimFiyat": 85,
+          "birimFiyatHaricKDV": 85,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 85
+        }
+      ],
+      "araToplam": 3874.8,
+      "kdvToplam": 0,
+      "toplamTutar": 3874.8,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-25T20:25:55.632Z"
+    },
+    {
+      "id": 2,
+      "fisNo": "FIS-1748204759979",
+      "tarih": "2025-05-25T20:25:59.979Z",
+      "urunler": [
+        {
+          "urunId": 11,
+          "urunAdi": "YER FISTIĞI",
+          "adet": 1,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 50,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 50
+        },
+        {
+          "urunId": 9,
+          "urunAdi": "MARLBORO TOUCH",
+          "adet": 3,
+          "birimFiyat": 85,
+          "birimFiyatHaricKDV": 85,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 255
+        },
+        {
+          "urunId": 7,
+          "urunAdi": "SU",
+          "adet": 2,
+          "birimFiyat": 10,
+          "birimFiyatHaricKDV": 10,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 20
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 2,
+          "birimFiyat": 973.4,
+          "birimFiyatHaricKDV": 973.4,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 1946.8
+        },
+        {
+          "urunId": 6,
+          "urunAdi": "TUBORG BİRA",
+          "adet": 2,
+          "birimFiyat": 844.5,
+          "birimFiyatHaricKDV": 844.5,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 1689
+        },
+        {
+          "urunId": 10,
+          "urunAdi": "TEKEL 2000",
+          "adet": 2,
+          "birimFiyat": 77,
+          "birimFiyatHaricKDV": 77,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 154
+        }
+      ],
+      "araToplam": 4114.8,
+      "kdvToplam": 0,
+      "toplamTutar": 4114.8,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-25T20:25:59.979Z"
+    },
+    {
+      "id": 3,
+      "fisNo": "FIS-1748204769232",
+      "tarih": "2025-05-25T20:26:09.232Z",
+      "urunler": [
+        {
+          "urunId": 10,
+          "urunAdi": "TEKEL 2000",
+          "adet": 2,
+          "birimFiyat": 77,
+          "birimFiyatHaricKDV": 77,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 154
+        },
+        {
+          "urunId": 9,
+          "urunAdi": "MARLBORO TOUCH",
+          "adet": 2,
+          "birimFiyat": 85,
+          "birimFiyatHaricKDV": 85,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 170
+        },
+        {
+          "urunId": 11,
+          "urunAdi": "YER FISTIĞI",
+          "adet": 3,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 50,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 150
+        },
+        {
+          "urunId": 17,
+          "urunAdi": "LAYS",
+          "adet": 2,
+          "birimFiyat": 50,
+          "birimFiyatHaricKDV": 50,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 100
+        }
+      ],
+      "araToplam": 574,
+      "kdvToplam": 0,
+      "toplamTutar": 574,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-25T20:26:09.232Z"
+    },
+    {
+      "id": 4,
+      "fisNo": "FIS-1748205130654",
+      "tarih": "2025-05-25T20:32:10.654Z",
+      "urunler": [
+        {
+          "urunId": 8,
+          "urunAdi": "WİNSTON BLUE",
+          "adet": 2,
+          "birimFiyat": 83,
+          "birimFiyatHaricKDV": 83,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 166
+        },
+        {
+          "urunId": 6,
+          "urunAdi": "TUBORG BİRA",
+          "adet": 2,
+          "birimFiyat": 844.5,
+          "birimFiyatHaricKDV": 844.5,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 1689
+        },
+        {
+          "urunId": 5,
+          "urunAdi": "EFES BİRA",
+          "adet": 12,
+          "birimFiyat": 973.4,
+          "birimFiyatHaricKDV": 973.4,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 11680.8
+        },
+        {
+          "urunId": 7,
+          "urunAdi": "SU",
+          "adet": 3,
+          "birimFiyat": 10,
+          "birimFiyatHaricKDV": 10,
+          "kdvOrani": 0,
+          "kdvTutari": 0,
+          "tutar": 30
+        }
+      ],
+      "araToplam": 13565.8,
+      "kdvToplam": 0,
+      "toplamTutar": 13565.8,
+      "odemeYontemi": "Nakit",
+      "odemeDurumu": "Ödendi",
+      "createdAt": "2025-05-25T20:32:10.654Z"
+    }
+  ],
+  "kategoriler": [
+    {
+      "id": 3,
+      "ad": "BİRALAR",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:08.657Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:08.657Z"
+    },
+    {
+      "id": 5,
+      "ad": "YİYECEK",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-22T11:25:29.809Z",
+      "guncellenmeTarihi": "2025-05-22T11:25:29.809Z"
+    },
+    {
+      "id": 6,
+      "ad": "ÇEREZ",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T10:39:59.887Z",
+      "guncellenmeTarihi": "2025-05-24T10:39:59.887Z"
+    },
+    {
+      "id": 7,
+      "ad": "İÇEÇEK",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T12:35:01.419Z",
+      "guncellenmeTarihi": "2025-05-24T12:35:01.419Z"
+    },
+    {
+      "id": 8,
+      "ad": "TÜTÜN ÜRÜNLERİ",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T13:41:20.124Z",
+      "guncellenmeTarihi": "2025-05-24T13:41:20.124Z"
+    },
+    {
+      "id": 9,
+      "ad": "ÇAKMAK",
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T13:50:52.598Z",
+      "guncellenmeTarihi": "2025-05-24T13:50:52.598Z"
+    }
+  ],
+  "altKategoriler": [
+    {
+      "id": 3,
+      "ad": "EFES",
+      "kategoriId": 3,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:17.549Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:17.549Z"
+    },
+    {
+      "id": 4,
+      "ad": "TUBORG",
+      "kategoriId": 3,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-19T20:17:28.987Z",
+      "guncellenmeTarihi": "2025-05-19T20:17:28.987Z"
+    },
+    {
+      "id": 5,
+      "ad": "SU",
+      "kategoriId": 7,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T12:35:13.031Z",
+      "guncellenmeTarihi": "2025-05-24T12:35:13.031Z"
+    },
+    {
+      "id": 6,
+      "ad": "TEKEL",
+      "kategoriId": 8,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T13:42:05.053Z",
+      "guncellenmeTarihi": "2025-05-24T13:42:05.053Z"
+    },
+    {
+      "id": 7,
+      "ad": "WİNSTON",
+      "kategoriId": 8,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T13:42:11.793Z",
+      "guncellenmeTarihi": "2025-05-24T13:42:11.793Z"
+    },
+    {
+      "id": 8,
+      "ad": "MARLBORO",
+      "kategoriId": 8,
+      "aciklama": "",
+      "olusturmaTarihi": "2025-05-24T13:42:20.067Z",
+      "guncellenmeTarihi": "2025-05-24T13:42:20.067Z"
+    }
+  ]
+}
